@@ -163,8 +163,8 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           overflow: hidden;
         }
         .cover__photo :global(img) {
-          filter: blur(9px) saturate(0.9);
-          transform: scale(1.15);
+          filter: blur(5px) saturate(0.9);
+          transform: scale(1.1);
         }
         .cover__photo::after {
           content: "";
@@ -212,8 +212,8 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           overflow: hidden;
         }
         :global(.envelope-face__backdrop img) {
-          filter: blur(20px) saturate(1.1) brightness(1.06);
-          transform: scale(1.2);
+          filter: blur(8px) saturate(1.1) brightness(1.06);
+          transform: scale(1.1);
         }
 
         /* next/image renders a plain <img> for a custom component, which
@@ -241,6 +241,8 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           );
         }
 
+        /* champagne — the same warm gold the monogram is struck in, deep
+           enough to still read against the pale floral photo */
         .envelope-face__label {
           position: absolute;
           left: 0;
@@ -251,7 +253,8 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           font-size: 0.8rem;
           letter-spacing: 0.22em;
           text-transform: uppercase;
-          color: rgba(255, 255, 255, 0.85);
+          color: var(--gold-700);
+          text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
         }
         .envelope-face__names {
           position: absolute;
@@ -261,7 +264,8 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           z-index: 2;
           font-family: var(--display);
           font-size: 1.4rem;
-          color: #fff;
+          color: var(--gold-600);
+          text-shadow: 0 1px 4px rgba(255, 255, 255, 0.55);
         }
         .envelope-face__names em { font-size: 0.85em; }
         .envelope-face__tap {
@@ -273,7 +277,8 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           font-size: 0.78rem;
           letter-spacing: 0.14em;
           text-transform: uppercase;
-          color: rgba(255, 255, 255, 0.85);
+          color: var(--gold-700);
+          text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
           animation: tap-pulse 1.8s ease-in-out infinite;
         }
         @keyframes tap-pulse {
@@ -300,12 +305,16 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
         }
         .crest :global(img) { width: 100%; height: auto; display: block; }
 
-        /* the crest ships gold — shift its hue to the sage swatch supplied */
+        /* the crest ships gold — shift its hue to the sage swatch supplied.
+           Also raised above the monogram, so the frame reads in front of
+           the letters instead of the letters sitting on top of it. */
         .crest--sage > :global(img:first-child) {
+          position: relative;
+          z-index: 2;
           filter: hue-rotate(72deg) saturate(0.55) brightness(1.12);
         }
 
-        /* sized to sit inside the oval's pearled inner ring */
+        /* sized to sit inside the oval's pearled inner ring, behind the frame */
         .crest :global(img.crest__monogram) {
           position: absolute;
           top: 46.5%;
@@ -313,6 +322,7 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           transform: translate(-50%, -50%);
           width: 37%;
           height: auto;
+          z-index: 1;
         }
 
         @keyframes crest-in {
