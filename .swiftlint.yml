@@ -1,0 +1,25 @@
+# SwiftLint configuration for Mizan.
+# Kept deliberately close to the defaults — the goal is catching drift and
+# obvious mistakes, not enforcing an exotic style.
+
+excluded:
+  - Mizan.xcodeproj
+  - DerivedData
+  - .build
+
+disabled_rules:
+  # TODO comments are used intentionally as phase markers during the build
+  # (e.g. stubs the blueprint says to fill with real data later).
+  - todo
+
+line_length:
+  warning: 140
+  error: 200
+
+identifier_name:
+  min_length: 2 # Allow short-but-clear names like `db`, `p10`.
+
+# Test suites legitimately accumulate many small cases per class.
+type_body_length:
+  warning: 500
+  error: 600

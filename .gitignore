@@ -1,0 +1,29 @@
+# macOS noise
+.DS_Store
+
+# Claude Code machine-local session state (permissions, locks) — not source
+.claude/
+
+# Xcode user state — per-machine, never shared
+xcuserdata/
+*.xcuserstate
+
+# Build products
+DerivedData/
+build/
+
+# SPM local checkout artifacts
+.swiftpm/
+.build/
+
+# Device container downloads (encrypted, but not source)
+*.xcappdata/
+
+# Raw receipt photos — personal documents; tests use the JSON fixtures instead
+receipts/
+
+# Icon source artwork (kept locally, generated PNG is committed)
+/*.jpg
+
+# Marketing video prompts kept local, not part of the app repo
+Screenshots/nano-banana-prompts.md

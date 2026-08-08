@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mizan — Support</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1a1a1a; background: #f7f7f5;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 48px 20px 80px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  h2 { font-size: 18px; margin: 30px 0 6px; }
+  .muted { color: #6b6b6b; }
+  a { color: #2f7d49; }
+  .cta {
+    display: inline-block; background: #3da35d; color: #fff; text-decoration: none;
+    font-weight: 600; padding: 12px 22px; border-radius: 12px; margin: 10px 0 4px;
+  }
+  .card { background: #fff; border: 1px solid #e6e6e2; border-radius: 14px; padding: 18px 20px; margin: 20px 0; }
+  details { margin: 10px 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  footer { margin-top: 40px; font-size: 13px; color: #8a8a8a; }
+  @media (prefers-color-scheme: dark) {
+    body { color: #ececec; background: #121212; }
+    .muted { color: #9a9a9a; }
+    .card { background: #1c1c1c; border-color: #2b2b2b; }
+    footer { color: #7a7a7a; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Mizan Support</h1>
+  <p class="muted">Private, on-device money tracking for iPhone.</p>
+
+  <div class="card">
+    <p>Need help, found a bug, or have a feature request? We're happy to help.</p>
+    <a class="cta" href="mailto:markgaras90@gmail.com?subject=Mizan%20Support">Email support</a>
+    <p class="muted" style="margin-top:8px">markgaras90@gmail.com — we usually reply within a few days.</p>
+  </div>
+
+  <h2>Frequently asked</h2>
+
+  <details>
+    <summary>Where is my data stored?</summary>
+    <p>Entirely on your iPhone, in an encrypted database protected by Face ID or your device
+    passcode. Mizan has no account and no server — your data is never uploaded to us.</p>
+  </details>
+
+  <details>
+    <summary>How do I back up or move my data?</summary>
+    <p>Go to <strong>Settings → Data</strong> to export an encrypted backup or a CSV/JSON file.
+    Keep your backup passphrase safe — without it, an encrypted backup cannot be restored.</p>
+  </details>
+
+  <details>
+    <summary>How do I erase everything?</summary>
+    <p>Use <strong>Settings → Data → Erase all data</strong>, or delete the app from your
+    iPhone.</p>
+  </details>
+
+  <details>
+    <summary>How do budgets reset?</summary>
+    <p>By default your budget follows the calendar month. In <strong>Settings → Budget</strong>
+    you can set the reset day to your pay day, or tap “Reset budget now” to start a fresh cycle
+    from today.</p>
+  </details>
+
+  <details>
+    <summary>Is Mizan AI private?</summary>
+    <p>Mizan AI is off by default. On supported iPhones it can run on-device (nothing is sent
+    anywhere). Any server option is opt-in and only sends a small set of summary figures plus
+    your question — never your individual transactions. See our
+    <a href="privacy.html">Privacy Policy</a>.</p>
+  </details>
+
+  <p style="margin-top:24px"><a href="privacy.html">Privacy Policy</a></p>
+
+  <footer>© 2026 Mizan.</footer>
+</div>
+</body>
+</html>

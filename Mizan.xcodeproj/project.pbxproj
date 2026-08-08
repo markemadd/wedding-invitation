@@ -1,0 +1,790 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0416FC1A9869D79E57C37809 /* Persistence in Frameworks */ = {isa = PBXBuildFile; productRef = 67ECD19A68CEACED2C2BDAFA /* Persistence */; };
+		0B0700607AA4D7D8CDFE6FC9 /* CaptureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89565BBE4115792B42556567 /* CaptureViewModel.swift */; };
+		14432EA131661B37DA4CF073 /* NetWorthDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DE0608A2C802D6E3AC04E8 /* NetWorthDetailSheet.swift */; };
+		15669CB15B34301BEF22D8DB /* BillsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C948106533DACE93BE4ADBA6 /* BillsView.swift */; };
+		15E1B0DC8166B6BE428874F1 /* MizanAIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C94D1C2BFD9F6EEE6221A9 /* MizanAIView.swift */; };
+		16C7E29320098C9691E48F8C /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D28A08F4179864691BDF4DE /* CameraPicker.swift */; };
+		18394C1E4F0767876BFD7623 /* VoiceCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A374613B1692F86B30D719 /* VoiceCaptureView.swift */; };
+		1BA7D242555303479E2337A3 /* ScreenshotSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F6331DD2C6AB7796FEC301 /* ScreenshotSupport.swift */; };
+		200DC2499B910A1D04D66963 /* ReceiptCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7939EFD762FAC4BFD55B9800 /* ReceiptCaptureView.swift */; };
+		267E182227FA6213AA563B94 /* OnboardingIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DBE7B55E2CF334C2D0C009 /* OnboardingIntroView.swift */; };
+		28D2A4BD9C51F58AA361D8C2 /* ProfileViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE357DDD47F8DCD7EF310D14 /* ProfileViews.swift */; };
+		30FE9B84CDAAED938D70C980 /* PlanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE90F637763DF87C0079811 /* PlanViewModel.swift */; };
+		3342446C4DEDADC9CED2F333 /* Capture in Frameworks */ = {isa = PBXBuildFile; productRef = 6E6F8AC004D3DD827C5BE20A /* Capture */; };
+		381E6F26461DB1937D0960FA /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B5216290B1DC88326D578 /* MainTabView.swift */; };
+		39029DCBFAA97D5B913EBE19 /* LLM in Frameworks */ = {isa = PBXBuildFile; productRef = 338BB94920E548B79F185AE6 /* LLM */; };
+		3D11ADD2E356C8C52F4DECEC /* LogWalletTransactionIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464F236565C0970A81EE24A8 /* LogWalletTransactionIntent.swift */; };
+		40E247B76D1FAE462506FA1E /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517398170C146FCCA1185C9B /* TransactionsView.swift */; };
+		433D85F6E9EC409C9B23ED5B /* LogBankSMSIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE8794077EBE292DAABFCE6 /* LogBankSMSIntent.swift */; };
+		479BFF437C7B92A0AC9115C9 /* MizanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB997FF621DCCE30BD6AD19E /* MizanApp.swift */; };
+		48A4456C57D7079CDEE5DB57 /* ManualEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069D07D9964E5CB2CA70A824 /* ManualEntryView.swift */; };
+		538F4A491A0A4740FC0632C8 /* StoryCardShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B128DD806530028F8807C1AD /* StoryCardShareView.swift */; };
+		565EC011BF2268D901F10510 /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1C77C0E0476B4FA43DFA0A /* WidgetSnapshot.swift */; };
+		63A127FD08E62C249D564A62 /* BillsCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67CFC1A19094061703EF0C9 /* BillsCalendarView.swift */; };
+		6B5CE1FCF05C23475AACC810 /* Forecasting in Frameworks */ = {isa = PBXBuildFile; productRef = 5428BCE4621495D6CEE747FE /* Forecasting */; };
+		6B9B79A28D0DAE4A78EF7363 /* TransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAB9CAFB479536C523FE117 /* TransferView.swift */; };
+		7431B6ACD3091C17F1E023B3 /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBCB28D1C454129FC89012F /* AppPreferences.swift */; };
+		75E308027DE5DD5D87253B0A /* WidgetSnapshotPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1751DF1D8DE21CE3894D5C /* WidgetSnapshotPublisher.swift */; };
+		7C1BC1A515FAD460CECEF7E0 /* MizanWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBDC29B2F54381FCA88D0C8E /* MizanWidgets.swift */; };
+		8534D2D0071486DEA00B6B8E /* Budgeting in Frameworks */ = {isa = PBXBuildFile; productRef = B02035D9F334C7F244B557E6 /* Budgeting */; };
+		9296DC78964671750971583B /* DashboardSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808F1A2214916F92DE653FD /* DashboardSection.swift */; };
+		92DBA71CD14AF7D368644A29 /* BillSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BFA5F53E87CDD26F1E246 /* BillSplitView.swift */; };
+		936190A4ADB5E5E23A781CED /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D467CCB8D6268047DEE3D970 /* InsightsView.swift */; };
+		93D107206DD665383F95C268 /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1C77C0E0476B4FA43DFA0A /* WidgetSnapshot.swift */; };
+		93F9106466E026C2B4D8C4BA /* UI in Frameworks */ = {isa = PBXBuildFile; productRef = 98947D279D929086740221A6 /* UI */; };
+		9DD797083112CD105C483F7D /* MizanAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387636202C134C486A447BAB /* MizanAppShortcuts.swift */; };
+		A4B54A9C80CF459C067D6EC3 /* MizanWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D7B8C50CA698C1F0226E076E /* MizanWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A8850D95BC2DDCD85598BA61 /* ProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B88BD38C7E7114E4DFC3DF /* ProfileStore.swift */; };
+		A9E5A17F241637D0246C5AD3 /* BucketsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1908F9841D3E53CF90E4E524 /* BucketsView.swift */; };
+		B147599351271AC25DBFC582 /* PlanDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A905EDCB9214FBD8B96AB1 /* PlanDetailView.swift */; };
+		B490B64CBB710D5D833F521A /* WalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC26FDAEA5B3786C1CB0066 /* WalletView.swift */; };
+		B512894303DFCCD682899D6C /* ItemPriceHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFA1ED840EDF3580F0E8900 /* ItemPriceHistoryView.swift */; };
+		BDF36CE12C62BECECE74E90B /* SMSCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D0025C7F07A285C167282B /* SMSCaptureView.swift */; };
+		C1C95E8A76D4B55267107429 /* NewCertificateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85039C7B656E6E92CA9F3C80 /* NewCertificateView.swift */; };
+		C214F3EF990AC83813530B1E /* AccountBalancesEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609080D186CF9B04496986D9 /* AccountBalancesEditorView.swift */; };
+		D76E6A9447037FA7AEC6BED9 /* NewAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967E44435D305777F710EC6C /* NewAccountView.swift */; };
+		E48BF9CDD685B92A5631B4A5 /* SavingsAndGoals in Frameworks */ = {isa = PBXBuildFile; productRef = 07352E5AD65BA179E6DC3D01 /* SavingsAndGoals */; };
+		EF55277A4F2AE6FBC0A5DB58 /* NewInstallmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE54337D7003378AE487A1CF /* NewInstallmentView.swift */; };
+		F06901F7009022C3E02B01F9 /* InvestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F265ABFB1BD5636E43CD78 /* InvestView.swift */; };
+		F325AB8D91788D25A9AD65DC /* InsightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A1202C813AC9E580F61C9D /* InsightsViewModel.swift */; };
+		F45BAA3D1113BD83370AEF58 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1412A0338676E17157F62EF2 /* SettingsView.swift */; };
+		F72AFE7BEA3B81B2BBAB670E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4BD32EADE97829C260D1958D /* Assets.xcassets */; };
+		FDEC8F4AA4B5C6E4C80CA9DB /* MizanSecurity in Frameworks */ = {isa = PBXBuildFile; productRef = 6FA9C2DE0C10D93230CE5D34 /* MizanSecurity */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		52DC08095787AC22BA868075 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F052BE4BA0FDF6B317D5192A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9ABEA31865CA4F6D6BBC49AB;
+			remoteInfo = MizanWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F58094B6D0B4429D01541C39 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A4B54A9C80CF459C067D6EC3 /* MizanWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		035BFA5F53E87CDD26F1E246 /* BillSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillSplitView.swift; sourceTree = "<group>"; };
+		069D07D9964E5CB2CA70A824 /* ManualEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualEntryView.swift; sourceTree = "<group>"; };
+		0CE90F637763DF87C0079811 /* PlanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewModel.swift; sourceTree = "<group>"; };
+		1412A0338676E17157F62EF2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		1908F9841D3E53CF90E4E524 /* BucketsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BucketsView.swift; sourceTree = "<group>"; };
+		19F6331DD2C6AB7796FEC301 /* ScreenshotSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotSupport.swift; sourceTree = "<group>"; };
+		22398401B18D09A94B6D7F02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		27AA0976B0CA9703F260BF60 /* Forecasting */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Forecasting; path = Packages/Forecasting; sourceTree = SOURCE_ROOT; };
+		29F0E1C47E5981E8FFE6B686 /* Mizan.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Mizan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B1C77C0E0476B4FA43DFA0A /* WidgetSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSnapshot.swift; sourceTree = "<group>"; };
+		387636202C134C486A447BAB /* MizanAppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MizanAppShortcuts.swift; sourceTree = "<group>"; };
+		464F236565C0970A81EE24A8 /* LogWalletTransactionIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogWalletTransactionIntent.swift; sourceTree = "<group>"; };
+		4BD32EADE97829C260D1958D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		517398170C146FCCA1185C9B /* TransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
+		609080D186CF9B04496986D9 /* AccountBalancesEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountBalancesEditorView.swift; sourceTree = "<group>"; };
+		71B88BD38C7E7114E4DFC3DF /* ProfileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileStore.swift; sourceTree = "<group>"; };
+		73C94D1C2BFD9F6EEE6221A9 /* MizanAIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MizanAIView.swift; sourceTree = "<group>"; };
+		751F24EAB6D701A9BF7C8014 /* MizanWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MizanWidgets.entitlements; sourceTree = "<group>"; };
+		7939EFD762FAC4BFD55B9800 /* ReceiptCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCaptureView.swift; sourceTree = "<group>"; };
+		79DBE7B55E2CF334C2D0C009 /* OnboardingIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingIntroView.swift; sourceTree = "<group>"; };
+		7F07BEC8390AFBEF5A169B67 /* MizanSecurity */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MizanSecurity; path = Packages/MizanSecurity; sourceTree = SOURCE_ROOT; };
+		7F752473366219B2A42D3372 /* Budgeting */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Budgeting; path = Packages/Budgeting; sourceTree = SOURCE_ROOT; };
+		815DB5776C45FB42B08F939D /* LLM */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LLM; path = Packages/LLM; sourceTree = SOURCE_ROOT; };
+		85039C7B656E6E92CA9F3C80 /* NewCertificateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCertificateView.swift; sourceTree = "<group>"; };
+		88F265ABFB1BD5636E43CD78 /* InvestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestView.swift; sourceTree = "<group>"; };
+		89565BBE4115792B42556567 /* CaptureViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureViewModel.swift; sourceTree = "<group>"; };
+		94DE0608A2C802D6E3AC04E8 /* NetWorthDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetWorthDetailSheet.swift; sourceTree = "<group>"; };
+		967E44435D305777F710EC6C /* NewAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAccountView.swift; sourceTree = "<group>"; };
+		9B1751DF1D8DE21CE3894D5C /* WidgetSnapshotPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSnapshotPublisher.swift; sourceTree = "<group>"; };
+		9BBCB28D1C454129FC89012F /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
+		9D28A08F4179864691BDF4DE /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
+		9FFA1ED840EDF3580F0E8900 /* ItemPriceHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemPriceHistoryView.swift; sourceTree = "<group>"; };
+		A094E45D9ACA721E760255FA /* SavingsAndGoals */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SavingsAndGoals; path = Packages/SavingsAndGoals; sourceTree = SOURCE_ROOT; };
+		A67CFC1A19094061703EF0C9 /* BillsCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillsCalendarView.swift; sourceTree = "<group>"; };
+		AAE8794077EBE292DAABFCE6 /* LogBankSMSIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogBankSMSIntent.swift; sourceTree = "<group>"; };
+		AB7399E53814240E0F92974C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		AB997FF621DCCE30BD6AD19E /* MizanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MizanApp.swift; sourceTree = "<group>"; };
+		ABC26FDAEA5B3786C1CB0066 /* WalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletView.swift; sourceTree = "<group>"; };
+		AEAB9CAFB479536C523FE117 /* TransferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferView.swift; sourceTree = "<group>"; };
+		B128DD806530028F8807C1AD /* StoryCardShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardShareView.swift; sourceTree = "<group>"; };
+		B1A1202C813AC9E580F61C9D /* InsightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
+		B808F1A2214916F92DE653FD /* DashboardSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSection.swift; sourceTree = "<group>"; };
+		BA0B5216290B1DC88326D578 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		BE54337D7003378AE487A1CF /* NewInstallmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewInstallmentView.swift; sourceTree = "<group>"; };
+		C0D0025C7F07A285C167282B /* SMSCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMSCaptureView.swift; sourceTree = "<group>"; };
+		C2A24FA0F42C1A86FE9A3E66 /* Mizan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mizan.entitlements; sourceTree = "<group>"; };
+		C948106533DACE93BE4ADBA6 /* BillsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillsView.swift; sourceTree = "<group>"; };
+		CE357DDD47F8DCD7EF310D14 /* ProfileViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViews.swift; sourceTree = "<group>"; };
+		D4556D76713505100F5DB549 /* UI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = UI; path = Packages/UI; sourceTree = SOURCE_ROOT; };
+		D467CCB8D6268047DEE3D970 /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
+		D5A374613B1692F86B30D719 /* VoiceCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCaptureView.swift; sourceTree = "<group>"; };
+		D7B8C50CA698C1F0226E076E /* MizanWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = MizanWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBDC29B2F54381FCA88D0C8E /* MizanWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MizanWidgets.swift; sourceTree = "<group>"; };
+		EC2FC5535EA850CCAF1E0D5B /* Persistence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Persistence; path = Packages/Persistence; sourceTree = SOURCE_ROOT; };
+		F0A905EDCB9214FBD8B96AB1 /* PlanDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDetailView.swift; sourceTree = "<group>"; };
+		F0BF5BC6B5D97D9EB8E79FFB /* Capture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Capture; path = Packages/Capture; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		30C34A6DE3705CE782EAF3F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0416FC1A9869D79E57C37809 /* Persistence in Frameworks */,
+				FDEC8F4AA4B5C6E4C80CA9DB /* MizanSecurity in Frameworks */,
+				3342446C4DEDADC9CED2F333 /* Capture in Frameworks */,
+				8534D2D0071486DEA00B6B8E /* Budgeting in Frameworks */,
+				E48BF9CDD685B92A5631B4A5 /* SavingsAndGoals in Frameworks */,
+				6B5CE1FCF05C23475AACC810 /* Forecasting in Frameworks */,
+				39029DCBFAA97D5B913EBE19 /* LLM in Frameworks */,
+				93F9106466E026C2B4D8C4BA /* UI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2034EE762865FC5B956B20EA /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				AB7399E53814240E0F92974C /* Info.plist */,
+				751F24EAB6D701A9BF7C8014 /* MizanWidgets.entitlements */,
+				DBDC29B2F54381FCA88D0C8E /* MizanWidgets.swift */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
+		2CE8A3DBF310C829943AC29F /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				7F752473366219B2A42D3372 /* Budgeting */,
+				F0BF5BC6B5D97D9EB8E79FFB /* Capture */,
+				27AA0976B0CA9703F260BF60 /* Forecasting */,
+				815DB5776C45FB42B08F939D /* LLM */,
+				7F07BEC8390AFBEF5A169B67 /* MizanSecurity */,
+				EC2FC5535EA850CCAF1E0D5B /* Persistence */,
+				A094E45D9ACA721E760255FA /* SavingsAndGoals */,
+				D4556D76713505100F5DB549 /* UI */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		2F1A98253DA719EC1D657E3C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				29F0E1C47E5981E8FFE6B686 /* Mizan.app */,
+				D7B8C50CA698C1F0226E076E /* MizanWidgets.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3BA1C31E5068EEB437F5B28D = {
+			isa = PBXGroup;
+			children = (
+				D60F67DE10ACF7EC113C0AAB /* App */,
+				2CE8A3DBF310C829943AC29F /* Packages */,
+				9C10C28B1482247155A5D88E /* Shared */,
+				2034EE762865FC5B956B20EA /* Widgets */,
+				2F1A98253DA719EC1D657E3C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9C10C28B1482247155A5D88E /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				2B1C77C0E0476B4FA43DFA0A /* WidgetSnapshot.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		D60F67DE10ACF7EC113C0AAB /* App */ = {
+			isa = PBXGroup;
+			children = (
+				609080D186CF9B04496986D9 /* AccountBalancesEditorView.swift */,
+				9BBCB28D1C454129FC89012F /* AppPreferences.swift */,
+				4BD32EADE97829C260D1958D /* Assets.xcassets */,
+				A67CFC1A19094061703EF0C9 /* BillsCalendarView.swift */,
+				035BFA5F53E87CDD26F1E246 /* BillSplitView.swift */,
+				C948106533DACE93BE4ADBA6 /* BillsView.swift */,
+				1908F9841D3E53CF90E4E524 /* BucketsView.swift */,
+				9D28A08F4179864691BDF4DE /* CameraPicker.swift */,
+				89565BBE4115792B42556567 /* CaptureViewModel.swift */,
+				B808F1A2214916F92DE653FD /* DashboardSection.swift */,
+				22398401B18D09A94B6D7F02 /* Info.plist */,
+				D467CCB8D6268047DEE3D970 /* InsightsView.swift */,
+				B1A1202C813AC9E580F61C9D /* InsightsViewModel.swift */,
+				88F265ABFB1BD5636E43CD78 /* InvestView.swift */,
+				9FFA1ED840EDF3580F0E8900 /* ItemPriceHistoryView.swift */,
+				AAE8794077EBE292DAABFCE6 /* LogBankSMSIntent.swift */,
+				464F236565C0970A81EE24A8 /* LogWalletTransactionIntent.swift */,
+				BA0B5216290B1DC88326D578 /* MainTabView.swift */,
+				069D07D9964E5CB2CA70A824 /* ManualEntryView.swift */,
+				C2A24FA0F42C1A86FE9A3E66 /* Mizan.entitlements */,
+				73C94D1C2BFD9F6EEE6221A9 /* MizanAIView.swift */,
+				AB997FF621DCCE30BD6AD19E /* MizanApp.swift */,
+				387636202C134C486A447BAB /* MizanAppShortcuts.swift */,
+				94DE0608A2C802D6E3AC04E8 /* NetWorthDetailSheet.swift */,
+				967E44435D305777F710EC6C /* NewAccountView.swift */,
+				85039C7B656E6E92CA9F3C80 /* NewCertificateView.swift */,
+				BE54337D7003378AE487A1CF /* NewInstallmentView.swift */,
+				79DBE7B55E2CF334C2D0C009 /* OnboardingIntroView.swift */,
+				F0A905EDCB9214FBD8B96AB1 /* PlanDetailView.swift */,
+				0CE90F637763DF87C0079811 /* PlanViewModel.swift */,
+				71B88BD38C7E7114E4DFC3DF /* ProfileStore.swift */,
+				CE357DDD47F8DCD7EF310D14 /* ProfileViews.swift */,
+				7939EFD762FAC4BFD55B9800 /* ReceiptCaptureView.swift */,
+				19F6331DD2C6AB7796FEC301 /* ScreenshotSupport.swift */,
+				1412A0338676E17157F62EF2 /* SettingsView.swift */,
+				C0D0025C7F07A285C167282B /* SMSCaptureView.swift */,
+				B128DD806530028F8807C1AD /* StoryCardShareView.swift */,
+				517398170C146FCCA1185C9B /* TransactionsView.swift */,
+				AEAB9CAFB479536C523FE117 /* TransferView.swift */,
+				D5A374613B1692F86B30D719 /* VoiceCaptureView.swift */,
+				ABC26FDAEA5B3786C1CB0066 /* WalletView.swift */,
+				9B1751DF1D8DE21CE3894D5C /* WidgetSnapshotPublisher.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9ABEA31865CA4F6D6BBC49AB /* MizanWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 77020DB17A37B83647702BD1 /* Build configuration list for PBXNativeTarget "MizanWidgets" */;
+			buildPhases = (
+				6DD9A72E3DF1DB1BA6C9756B /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MizanWidgets;
+			packageProductDependencies = (
+			);
+			productName = MizanWidgets;
+			productReference = D7B8C50CA698C1F0226E076E /* MizanWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		A25F35EAA51519E7CCB9A92A /* Mizan */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0035561CE274D0BCB3FCCEEB /* Build configuration list for PBXNativeTarget "Mizan" */;
+			buildPhases = (
+				6F919385F9219699A8D307A2 /* Sources */,
+				FC90608942E7C48D6DB06AFD /* SwiftLint */,
+				260CAF5B79AE55D0197B9911 /* Resources */,
+				30C34A6DE3705CE782EAF3F8 /* Frameworks */,
+				F58094B6D0B4429D01541C39 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9FEB8F48088992298854BBFC /* PBXTargetDependency */,
+			);
+			name = Mizan;
+			packageProductDependencies = (
+				67ECD19A68CEACED2C2BDAFA /* Persistence */,
+				6FA9C2DE0C10D93230CE5D34 /* MizanSecurity */,
+				6E6F8AC004D3DD827C5BE20A /* Capture */,
+				B02035D9F334C7F244B557E6 /* Budgeting */,
+				07352E5AD65BA179E6DC3D01 /* SavingsAndGoals */,
+				5428BCE4621495D6CEE747FE /* Forecasting */,
+				338BB94920E548B79F185AE6 /* LLM */,
+				98947D279D929086740221A6 /* UI */,
+			);
+			productName = Mizan;
+			productReference = 29F0E1C47E5981E8FFE6B686 /* Mizan.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F052BE4BA0FDF6B317D5192A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					9ABEA31865CA4F6D6BBC49AB = {
+						DevelopmentTeam = 5N9MK9XFWG;
+						ProvisioningStyle = Automatic;
+					};
+					A25F35EAA51519E7CCB9A92A = {
+						DevelopmentTeam = 5N9MK9XFWG;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 2A0E1F8FE8BDA64C2BDA396C /* Build configuration list for PBXProject "Mizan" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 3BA1C31E5068EEB437F5B28D;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				47A4B202258841307DF3FA73 /* XCLocalSwiftPackageReference "Packages/Budgeting" */,
+				5E453C4C797B4B1FB6FAA7F0 /* XCLocalSwiftPackageReference "Packages/Capture" */,
+				E95518F17964A9AD4C688434 /* XCLocalSwiftPackageReference "Packages/Forecasting" */,
+				F6E07416DC361F7293BE80BF /* XCLocalSwiftPackageReference "Packages/LLM" */,
+				C4B6EE8E3435EAC14D1B5D4D /* XCLocalSwiftPackageReference "Packages/MizanSecurity" */,
+				D4E014DB7442C6839F79A731 /* XCLocalSwiftPackageReference "Packages/Persistence" */,
+				90F0FA64748A76488E123541 /* XCLocalSwiftPackageReference "Packages/SavingsAndGoals" */,
+				134488F0EBA4C1DCE2C3F352 /* XCLocalSwiftPackageReference "Packages/UI" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 2F1A98253DA719EC1D657E3C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A25F35EAA51519E7CCB9A92A /* Mizan */,
+				9ABEA31865CA4F6D6BBC49AB /* MizanWidgets */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		260CAF5B79AE55D0197B9911 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F72AFE7BEA3B81B2BBAB670E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FC90608942E7C48D6DB06AFD /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Blueprint Phase 0 task 6: SwiftLint as a build phase to catch style drift early.\n# Homebrew's bin dirs aren't on Xcode's PATH, so add them explicitly.\nexport PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\nif command -v swiftlint >/dev/null 2>&1; then\n  swiftlint --config \"${SRCROOT}/.swiftlint.yml\"\nelse\n  echo \"warning: SwiftLint is not installed — run: brew install swiftlint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6DD9A72E3DF1DB1BA6C9756B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C1BC1A515FAD460CECEF7E0 /* MizanWidgets.swift in Sources */,
+				93D107206DD665383F95C268 /* WidgetSnapshot.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F919385F9219699A8D307A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C214F3EF990AC83813530B1E /* AccountBalancesEditorView.swift in Sources */,
+				7431B6ACD3091C17F1E023B3 /* AppPreferences.swift in Sources */,
+				92DBA71CD14AF7D368644A29 /* BillSplitView.swift in Sources */,
+				63A127FD08E62C249D564A62 /* BillsCalendarView.swift in Sources */,
+				15669CB15B34301BEF22D8DB /* BillsView.swift in Sources */,
+				A9E5A17F241637D0246C5AD3 /* BucketsView.swift in Sources */,
+				16C7E29320098C9691E48F8C /* CameraPicker.swift in Sources */,
+				0B0700607AA4D7D8CDFE6FC9 /* CaptureViewModel.swift in Sources */,
+				9296DC78964671750971583B /* DashboardSection.swift in Sources */,
+				936190A4ADB5E5E23A781CED /* InsightsView.swift in Sources */,
+				F325AB8D91788D25A9AD65DC /* InsightsViewModel.swift in Sources */,
+				F06901F7009022C3E02B01F9 /* InvestView.swift in Sources */,
+				B512894303DFCCD682899D6C /* ItemPriceHistoryView.swift in Sources */,
+				433D85F6E9EC409C9B23ED5B /* LogBankSMSIntent.swift in Sources */,
+				3D11ADD2E356C8C52F4DECEC /* LogWalletTransactionIntent.swift in Sources */,
+				381E6F26461DB1937D0960FA /* MainTabView.swift in Sources */,
+				48A4456C57D7079CDEE5DB57 /* ManualEntryView.swift in Sources */,
+				15E1B0DC8166B6BE428874F1 /* MizanAIView.swift in Sources */,
+				479BFF437C7B92A0AC9115C9 /* MizanApp.swift in Sources */,
+				9DD797083112CD105C483F7D /* MizanAppShortcuts.swift in Sources */,
+				14432EA131661B37DA4CF073 /* NetWorthDetailSheet.swift in Sources */,
+				D76E6A9447037FA7AEC6BED9 /* NewAccountView.swift in Sources */,
+				C1C95E8A76D4B55267107429 /* NewCertificateView.swift in Sources */,
+				EF55277A4F2AE6FBC0A5DB58 /* NewInstallmentView.swift in Sources */,
+				267E182227FA6213AA563B94 /* OnboardingIntroView.swift in Sources */,
+				B147599351271AC25DBFC582 /* PlanDetailView.swift in Sources */,
+				30FE9B84CDAAED938D70C980 /* PlanViewModel.swift in Sources */,
+				A8850D95BC2DDCD85598BA61 /* ProfileStore.swift in Sources */,
+				28D2A4BD9C51F58AA361D8C2 /* ProfileViews.swift in Sources */,
+				200DC2499B910A1D04D66963 /* ReceiptCaptureView.swift in Sources */,
+				BDF36CE12C62BECECE74E90B /* SMSCaptureView.swift in Sources */,
+				1BA7D242555303479E2337A3 /* ScreenshotSupport.swift in Sources */,
+				F45BAA3D1113BD83370AEF58 /* SettingsView.swift in Sources */,
+				538F4A491A0A4740FC0632C8 /* StoryCardShareView.swift in Sources */,
+				40E247B76D1FAE462506FA1E /* TransactionsView.swift in Sources */,
+				6B9B79A28D0DAE4A78EF7363 /* TransferView.swift in Sources */,
+				18394C1E4F0767876BFD7623 /* VoiceCaptureView.swift in Sources */,
+				B490B64CBB710D5D833F521A /* WalletView.swift in Sources */,
+				565EC011BF2268D901F10510 /* WidgetSnapshot.swift in Sources */,
+				75E308027DE5DD5D87253B0A /* WidgetSnapshotPublisher.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9FEB8F48088992298854BBFC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9ABEA31865CA4F6D6BBC49AB /* MizanWidgets */;
+			targetProxy = 52DC08095787AC22BA868075 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		24D60D7D11DB772AA9AB32CE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Widgets/MizanWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5N9MK9XFWG;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.markemad.mizan.widgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		75E1FF1BBD07F6DCBF029D3B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Widgets/MizanWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5N9MK9XFWG;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.markemad.mizan.widgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		831BB66F223CB5ECAD1DDAC7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		8B85EAF6BE879044858DD5DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C9111FB09C6A8E3ACD856912 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = App/Mizan.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5N9MK9XFWG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Mizan photographs receipts only to read them on-device; photos are not saved or uploaded.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Mizan uses Face ID to unlock your encrypted financial data.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Mizan connects to the AI server you run on your own computer, over your local network — only when you turn on 'Use my AI server'.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Mizan records your voice only to transcribe a transaction, entirely on-device.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Mizan transcribes your spoken transactions on-device; audio never leaves your iPhone.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.markemad.mizan;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		D4F40EBC92ECAA207DEFDB24 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = App/Mizan.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5N9MK9XFWG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Mizan photographs receipts only to read them on-device; photos are not saved or uploaded.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Mizan uses Face ID to unlock your encrypted financial data.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Mizan connects to the AI server you run on your own computer, over your local network — only when you turn on 'Use my AI server'.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Mizan records your voice only to transcribe a transaction, entirely on-device.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Mizan transcribes your spoken transactions on-device; audio never leaves your iPhone.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.markemad.mizan;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0035561CE274D0BCB3FCCEEB /* Build configuration list for PBXNativeTarget "Mizan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4F40EBC92ECAA207DEFDB24 /* Debug */,
+				C9111FB09C6A8E3ACD856912 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2A0E1F8FE8BDA64C2BDA396C /* Build configuration list for PBXProject "Mizan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B85EAF6BE879044858DD5DB /* Debug */,
+				831BB66F223CB5ECAD1DDAC7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		77020DB17A37B83647702BD1 /* Build configuration list for PBXNativeTarget "MizanWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75E1FF1BBD07F6DCBF029D3B /* Debug */,
+				24D60D7D11DB772AA9AB32CE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		134488F0EBA4C1DCE2C3F352 /* XCLocalSwiftPackageReference "Packages/UI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/UI;
+		};
+		47A4B202258841307DF3FA73 /* XCLocalSwiftPackageReference "Packages/Budgeting" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Budgeting;
+		};
+		5E453C4C797B4B1FB6FAA7F0 /* XCLocalSwiftPackageReference "Packages/Capture" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Capture;
+		};
+		90F0FA64748A76488E123541 /* XCLocalSwiftPackageReference "Packages/SavingsAndGoals" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/SavingsAndGoals;
+		};
+		C4B6EE8E3435EAC14D1B5D4D /* XCLocalSwiftPackageReference "Packages/MizanSecurity" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/MizanSecurity;
+		};
+		D4E014DB7442C6839F79A731 /* XCLocalSwiftPackageReference "Packages/Persistence" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Persistence;
+		};
+		E95518F17964A9AD4C688434 /* XCLocalSwiftPackageReference "Packages/Forecasting" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Forecasting;
+		};
+		F6E07416DC361F7293BE80BF /* XCLocalSwiftPackageReference "Packages/LLM" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/LLM;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		07352E5AD65BA179E6DC3D01 /* SavingsAndGoals */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SavingsAndGoals;
+		};
+		338BB94920E548B79F185AE6 /* LLM */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LLM;
+		};
+		5428BCE4621495D6CEE747FE /* Forecasting */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Forecasting;
+		};
+		67ECD19A68CEACED2C2BDAFA /* Persistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Persistence;
+		};
+		6E6F8AC004D3DD827C5BE20A /* Capture */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Capture;
+		};
+		6FA9C2DE0C10D93230CE5D34 /* MizanSecurity */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MizanSecurity;
+		};
+		98947D279D929086740221A6 /* UI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UI;
+		};
+		B02035D9F334C7F244B557E6 /* Budgeting */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Budgeting;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = F052BE4BA0FDF6B317D5192A /* Project object */;
+}
