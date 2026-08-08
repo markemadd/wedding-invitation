@@ -53,6 +53,11 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           tabIndex={envelopeOpen ? -1 : 0}
           aria-label="Open the envelope"
         >
+          {/* the closed photo's own floral backdrop, reused so the open
+              photo's plain white ground has something to blend against */}
+          <span className="envelope-face__backdrop" aria-hidden="true">
+            <Image src={envelopeClosed} alt="" fill sizes="(max-width: 30rem) 100vw, 25rem" style={{ objectFit: "cover" }} />
+          </span>
           <Image
             className="envelope-face__img envelope-face__img--closed"
             src={envelopeClosed}
@@ -197,13 +202,31 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           pointer-events: none;
         }
 
+        /* the closed photo's own floral ground, blurred, sitting behind
+           everything — gives the open photo's white ground something
+           to blend into instead of a plain white flash */
+        .envelope-face__backdrop {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          overflow: hidden;
+        }
+        :global(.envelope-face__backdrop img) {
+          filter: blur(20px) saturate(1.1) brightness(1.06);
+          transform: scale(1.2);
+        }
+
         /* next/image renders a plain <img> for a custom component, which
            styled-jsx never auto-scopes — these need :global() to bite. */
         :global(.envelope-face__img) {
+          z-index: 1;
           transition: opacity 0.7s ease;
         }
         :global(.envelope-face__img--closed) { opacity: 1; }
-        :global(.envelope-face__img--open) { opacity: 0; }
+        :global(.envelope-face__img--open) {
+          opacity: 0;
+          mix-blend-mode: multiply;
+        }
         :global(.envelope-face--open .envelope-face__img--closed) { opacity: 0; }
         :global(.envelope-face--open .envelope-face__img--open) { opacity: 1; }
 
