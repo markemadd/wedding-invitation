@@ -560,14 +560,26 @@ textarea { resize: vertical; min-height: 6rem; line-height: 1.6; }
 
 /* ── timeline ───────────────────────────────────────────────────────────── */
 
-.timeline { position: relative; width: 100%; padding: 0.5rem 0; }
-.timeline__sprig {
+.timeline-card {
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+}
+.timeline-card__corner {
   position: absolute;
-  left: -3.25rem;
-  top: 12%;
-  opacity: 0.55;
+  top: -0.5rem;
+  right: -0.5rem;
+  opacity: 0.5;
   pointer-events: none;
 }
+.timeline-card__title {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  color: var(--gold-700);
+  margin-bottom: 1.1rem;
+}
+
+.timeline { position: relative; width: 100%; }
 
 .timeline ol {
   list-style: none;
@@ -820,12 +832,6 @@ textarea { resize: vertical; min-height: 6rem; line-height: 1.6; }
 .cover__date {
   font-variant-numeric: lining-nums tabular-nums;
   font-feature-settings: "lnum" 1, "tnum" 1;
-}
-
-/* ── the botanical beside the timeline must never crowd the times ───────── */
-
-@media (max-width: 30rem) {
-  .timeline__sprig { display: none; }
 }
 
 /* ── the adults-only note that closes the page ──────────────────────────── */

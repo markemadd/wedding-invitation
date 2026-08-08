@@ -3,7 +3,7 @@ import { couple, wedding } from "@/lib/config";
 import cross from "@/public/cross.png";
 import monogram from "@/public/monogram.png";
 import garden from "@/public/garden.png";
-import { Corner, Cross, Divider, Sprig } from "./Ornaments";
+import { Corner, Cross, Divider } from "./Ornaments";
 import Reveal from "./Reveal";
 
 /* ── hero ─────────────────────────────────────────────────────────────────
@@ -136,17 +136,21 @@ export function Schedule() {
     <Reveal className="section">
       <p className="eyebrow eyebrow-rule">Wedding Day Schedule</p>
 
-      <div className="timeline">
-        <span className="timeline__sprig timeline__sprig--top"><Sprig /></span>
-        <ol>
-          {wedding.schedule.map((row) => (
-            <li key={row.time + row.label}>
-              <span className="timeline__time">{row.time}</span>
-              <span className="timeline__dot" aria-hidden="true" />
-              <span className="timeline__label">{row.label}</span>
-            </li>
-          ))}
-        </ol>
+      <div className="card timeline-card">
+        <span className="timeline-card__corner"><Corner corner="tr" /></span>
+        <p className="timeline-card__title">Our Timeline</p>
+
+        <div className="timeline">
+          <ol>
+            {wedding.schedule.map((row) => (
+              <li key={row.time + row.label}>
+                <span className="timeline__time">{row.time}</span>
+                <span className="timeline__dot" aria-hidden="true" />
+                <span className="timeline__label">{row.label}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </Reveal>
   );

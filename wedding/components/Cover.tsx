@@ -46,10 +46,26 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           tabIndex={envelopeOpen ? -1 : 0}
           aria-label="Open the envelope"
         >
-          <span className="envelope-face__flap" aria-hidden="true" />
+          {/* the letter card, peeking out above the pocket */}
+          <span className="envelope-face__peek" aria-hidden="true" />
+
+          <span className="envelope-face__pocket" aria-hidden="true">
+            <span className="envelope-face__flap" />
+            <span className="envelope-face__crease envelope-face__crease--l" />
+            <span className="envelope-face__crease envelope-face__crease--r" />
+          </span>
+
+          <span className="envelope-face__ribbon" aria-hidden="true">
+            <span className="envelope-face__tail envelope-face__tail--l" />
+            <span className="envelope-face__tail envelope-face__tail--r" />
+            <span className="envelope-face__bow envelope-face__bow--l" />
+            <span className="envelope-face__bow envelope-face__bow--r" />
+          </span>
+
           <span className="envelope-face__seal" aria-hidden="true">
             <Image src={monogram} alt="" sizes="3rem" />
           </span>
+
           <span className="envelope-face__label">A Wedding Invitation</span>
           <span className="envelope-face__names">
             {couple.first} <em className="script">&amp;</em> {couple.second}
@@ -97,10 +113,10 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           display: grid;
           place-items: center;
           padding: clamp(1.25rem, 5vw, 3rem);
-          /* the deep sage the couple's monogram is set against */
+          /* the same warm cream the rest of the page is set on */
           background:
-            radial-gradient(115% 80% at 50% 6%, #5E7A52, transparent 62%),
-            linear-gradient(168deg, #4A6141, #33452F 70%, #26341F);
+            radial-gradient(115% 80% at 50% 6%, var(--gold-050), transparent 62%),
+            linear-gradient(168deg, var(--ivory), var(--ivory-dim) 70%, var(--gold-200));
           transition: opacity 1s ease, transform 1s cubic-bezier(0.7, 0, 0.3, 1);
         }
         .cover--leaving {
@@ -116,7 +132,8 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           padding: clamp(2.5rem, 8vw, 3.5rem) clamp(1.5rem, 6vw, 2.5rem) clamp(2rem, 7vw, 3rem);
           border-radius: 26px;
           background: linear-gradient(180deg, #ffffff, var(--ivory));
-          box-shadow: 0 40px 80px -30px rgba(16, 26, 12, 0.62);
+          border: 1px solid var(--hair-soft);
+          box-shadow: 0 40px 80px -30px rgba(63, 45, 32, 0.45);
           overflow: hidden;
           text-align: center;
           animation: rise 1.1s cubic-bezier(0.2, 0.7, 0.25, 1) both;
@@ -126,7 +143,10 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           to   { opacity: 1; transform: none; }
         }
 
-        /* ── the closed envelope, over the letter beneath ─────────────── */
+        /* ── the closed envelope, over the letter beneath ───────────────
+           A peeking card, a folded ivory pocket, a satin ribbon tied in a
+           bow, and a wax seal — built from gradients and clip-paths, not a
+           photo, so it stays crisp at any size and costs nothing to load. */
         .envelope-face {
           position: absolute;
           inset: 0;
@@ -136,10 +156,10 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           margin: 0;
           padding: 0;
           border-radius: inherit;
-          background: linear-gradient(180deg, #ffffff, var(--ivory));
+          background: var(--card);
           cursor: pointer;
-          perspective: 1000px;
-          transition: opacity 0.5s ease 0.55s, transform 0.5s ease 0.55s;
+          perspective: 1200px;
+          transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s;
         }
         .envelope-face--open {
           opacity: 0;
@@ -147,15 +167,38 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           pointer-events: none;
         }
 
+        /* the letter, sticking up out of the envelope */
+        .envelope-face__peek {
+          position: absolute;
+          top: 4%;
+          left: 21%;
+          right: 21%;
+          height: 30%;
+          border-radius: 6px 6px 0 0;
+          background: linear-gradient(180deg, #ffffff, var(--card));
+          box-shadow: 0 -1px 0 rgba(63, 45, 32, 0.08) inset, 0 4px 10px -6px rgba(63, 45, 32, 0.35);
+        }
+
+        /* the envelope body */
+        .envelope-face__pocket {
+          position: absolute;
+          top: 16%;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          overflow: hidden;
+          background: linear-gradient(175deg, #ffffff, var(--ivory) 60%);
+          box-shadow: 0 -6px 14px -10px rgba(63, 45, 32, 0.3) inset;
+        }
         .envelope-face__flap {
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
-          height: 56%;
+          height: 62%;
           clip-path: polygon(0 0, 100% 0, 50% 100%);
-          background: linear-gradient(155deg, #ffffff, var(--ivory) 75%);
-          box-shadow: 0 10px 16px -12px rgba(20, 30, 15, 0.4);
+          background: linear-gradient(155deg, #ffffff, var(--gold-050) 80%);
+          box-shadow: 0 10px 16px -12px rgba(63, 45, 32, 0.35);
           transform-origin: top center;
           transform: rotateX(0deg);
           transition: transform 0.85s cubic-bezier(0.6, 0, 0.25, 1);
@@ -163,10 +206,71 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
         .envelope-face--open .envelope-face__flap {
           transform: rotateX(-120deg);
         }
+        /* the folded side flaps, hinted at as creases behind the ribbon */
+        .envelope-face__crease {
+          position: absolute;
+          bottom: -6%;
+          width: 75%;
+          height: 60%;
+          border-top: 1px solid var(--hair-soft);
+          opacity: 0.8;
+        }
+        .envelope-face__crease--l { left: -18%; transform: rotate(24deg); transform-origin: top left; }
+        .envelope-face__crease--r { right: -18%; transform: rotate(-24deg); transform-origin: top right; }
+
+        /* the satin ribbon, tied across the middle */
+        .envelope-face__ribbon {
+          position: absolute;
+          left: -6%;
+          right: -6%;
+          top: 53%;
+          height: 2.3rem;
+          transform: translateY(-50%) rotate(-1.5deg);
+          background: linear-gradient(180deg, var(--gold-200) 0%, #fff 12%, var(--gold-050) 50%, #fff 88%, var(--gold-200) 100%);
+          box-shadow: 0 6px 14px -8px rgba(63, 45, 32, 0.4);
+        }
+        .envelope-face__tail {
+          position: absolute;
+          top: 100%;
+          width: 1.15rem;
+          height: 3.4rem;
+          background: linear-gradient(180deg, var(--gold-200), var(--gold-050) 60%, #fff);
+          box-shadow: 0 4px 8px -4px rgba(63, 45, 32, 0.35);
+        }
+        .envelope-face__tail--l {
+          left: 46.5%;
+          transform-origin: top center;
+          transform: rotate(16deg);
+          clip-path: polygon(0 0, 100% 0, 100% 82%, 50% 100%, 0 82%);
+        }
+        .envelope-face__tail--r {
+          right: 46.5%;
+          transform-origin: top center;
+          transform: rotate(-16deg);
+          clip-path: polygon(0 0, 100% 0, 100% 82%, 50% 100%, 0 82%);
+        }
+        .envelope-face__bow {
+          position: absolute;
+          top: 50%;
+          width: 3rem;
+          height: 2.3rem;
+          background: linear-gradient(155deg, #fff, var(--gold-200) 55%, var(--gold-400) 100%);
+          box-shadow: 0 5px 12px -5px rgba(63, 45, 32, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+        }
+        .envelope-face__bow--l {
+          left: calc(50% - 2.85rem);
+          transform: translateY(-50%) rotate(6deg);
+          clip-path: polygon(100% 6%, 0 0, 18% 50%, 0 100%, 100% 94%, 46% 50%);
+        }
+        .envelope-face__bow--r {
+          right: calc(50% - 2.85rem);
+          transform: translateY(-50%) rotate(-6deg);
+          clip-path: polygon(0 6%, 100% 0, 82% 50%, 100% 100%, 0 94%, 54% 50%);
+        }
 
         .envelope-face__seal {
           position: absolute;
-          top: 54%;
+          top: 53%;
           left: 50%;
           transform: translate(-50%, -50%);
           z-index: 1;
@@ -175,8 +279,8 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           border-radius: 50%;
           display: grid;
           place-items: center;
-          background: var(--gold-700);
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35), inset 0 -3px 6px rgba(0, 0, 0, 0.25);
+          background: radial-gradient(circle at 35% 30%, var(--gold-600), var(--gold-800) 75%);
+          box-shadow: 0 4px 10px rgba(63, 45, 32, 0.45), inset 0 -3px 6px rgba(0, 0, 0, 0.25), inset 0 2px 3px rgba(255, 255, 255, 0.35);
         }
         .envelope-face__seal :global(img) {
           width: 60%;
@@ -190,6 +294,7 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           left: 0;
           right: 0;
           bottom: 5.5rem;
+          z-index: 2;
           font-family: var(--display);
           font-size: 0.8rem;
           letter-spacing: 0.22em;
@@ -201,6 +306,7 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           left: 0;
           right: 0;
           bottom: 3.4rem;
+          z-index: 2;
           font-family: var(--display);
           font-size: 1.4rem;
           color: var(--gold-700);
@@ -211,6 +317,7 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           left: 0;
           right: 0;
           bottom: 1.6rem;
+          z-index: 2;
           font-size: 0.78rem;
           letter-spacing: 0.14em;
           text-transform: uppercase;
