@@ -12,6 +12,7 @@ import { Corner, Divider } from "./Ornaments";
  * releases the scroll — the same beat as the reference template.
  */
 export default function Cover({ onOpen }: { onOpen: () => void }) {
+  const [envelopeOpen, setEnvelopeOpen] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const [gone, setGone] = useState(false);
 
@@ -37,7 +38,26 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
         <span className="cover__corner cover__corner--tl"><Corner corner="tl" /></span>
         <span className="cover__corner cover__corner--br"><Corner corner="br" /></span>
 
-        <div className="cover__body">
+        <button
+          type="button"
+          className={`envelope-face ${envelopeOpen ? "envelope-face--open" : ""}`}
+          onClick={() => setEnvelopeOpen(true)}
+          aria-hidden={envelopeOpen}
+          tabIndex={envelopeOpen ? -1 : 0}
+          aria-label="Open the envelope"
+        >
+          <span className="envelope-face__flap" aria-hidden="true" />
+          <span className="envelope-face__seal" aria-hidden="true">
+            <Image src={monogram} alt="" sizes="3rem" />
+          </span>
+          <span className="envelope-face__label">A Wedding Invitation</span>
+          <span className="envelope-face__names">
+            {couple.first} <em className="script">&amp;</em> {couple.second}
+          </span>
+          <span className="envelope-face__tap">Tap to open</span>
+        </button>
+
+        <div className={`cover__body ${envelopeOpen ? "cover__body--shown" : "cover__body--hidden"}`}>
           {/* the crowned crest frames the couple's own JM monogram */}
           <div className="crest">
             <Image src={crest} alt="" priority sizes="(max-width: 30rem) 62vw, 15rem" />
@@ -92,6 +112,7 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
         .cover__card {
           position: relative;
           width: min(100%, 25rem);
+          min-height: 27rem;
           padding: clamp(2.5rem, 8vw, 3.5rem) clamp(1.5rem, 6vw, 2.5rem) clamp(2rem, 7vw, 3rem);
           border-radius: 26px;
           background: linear-gradient(180deg, #ffffff, var(--ivory));
@@ -103,6 +124,113 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
         @keyframes rise {
           from { opacity: 0; transform: translateY(2.5rem) scale(0.96); }
           to   { opacity: 1; transform: none; }
+        }
+
+        /* ── the closed envelope, over the letter beneath ─────────────── */
+        .envelope-face {
+          position: absolute;
+          inset: 0;
+          z-index: 5;
+          display: block;
+          border: 0;
+          margin: 0;
+          padding: 0;
+          border-radius: inherit;
+          background: linear-gradient(180deg, #ffffff, var(--ivory));
+          cursor: pointer;
+          perspective: 1000px;
+          transition: opacity 0.5s ease 0.55s, transform 0.5s ease 0.55s;
+        }
+        .envelope-face--open {
+          opacity: 0;
+          transform: translateY(-4%);
+          pointer-events: none;
+        }
+
+        .envelope-face__flap {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 56%;
+          clip-path: polygon(0 0, 100% 0, 50% 100%);
+          background: linear-gradient(155deg, #ffffff, var(--ivory) 75%);
+          box-shadow: 0 10px 16px -12px rgba(20, 30, 15, 0.4);
+          transform-origin: top center;
+          transform: rotateX(0deg);
+          transition: transform 0.85s cubic-bezier(0.6, 0, 0.25, 1);
+        }
+        .envelope-face--open .envelope-face__flap {
+          transform: rotateX(-120deg);
+        }
+
+        .envelope-face__seal {
+          position: absolute;
+          top: 54%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 1;
+          width: 3.4rem;
+          height: 3.4rem;
+          border-radius: 50%;
+          display: grid;
+          place-items: center;
+          background: var(--gold-700);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35), inset 0 -3px 6px rgba(0, 0, 0, 0.25);
+        }
+        .envelope-face__seal :global(img) {
+          width: 60%;
+          height: auto;
+          filter: brightness(0) invert(1);
+          opacity: 0.92;
+        }
+
+        .envelope-face__label {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 5.5rem;
+          font-family: var(--display);
+          font-size: 0.8rem;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: var(--ink-faint);
+        }
+        .envelope-face__names {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 3.4rem;
+          font-family: var(--display);
+          font-size: 1.4rem;
+          color: var(--gold-700);
+        }
+        .envelope-face__names em { font-size: 0.85em; }
+        .envelope-face__tap {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 1.6rem;
+          font-size: 0.78rem;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: var(--ink-soft);
+          animation: tap-pulse 1.8s ease-in-out infinite;
+        }
+        @keyframes tap-pulse {
+          0%, 100% { opacity: 0.55; }
+          50% { opacity: 1; }
+        }
+
+        .cover__body--hidden { opacity: 0; }
+        .cover__body--shown {
+          opacity: 1;
+          transition: opacity 0.6s ease 0.7s;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .envelope-face, .envelope-face__flap, .envelope-face__tap { animation: none; transition: opacity 0.2s linear; }
+          .envelope-face--open .envelope-face__flap { transform: none; }
         }
 
         .crest {
