@@ -88,7 +88,6 @@ export const wedding = {
   closingNote: {
     line: "Kiss your little ones goodnight,",
     emphasis: "and come enjoy the night with us.",
-    plain: "An adults-only celebration",
   },
 } as const;
 

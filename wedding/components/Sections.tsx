@@ -217,7 +217,6 @@ export function Closing() {
             {note.line}
             <em>{note.emphasis}</em>
           </p>
-          <p className="closing__note-plain">{note.plain}</p>
         </div>
       )}
 

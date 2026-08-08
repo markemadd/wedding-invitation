@@ -857,15 +857,6 @@ textarea { resize: vertical; min-height: 6rem; line-height: 1.6; }
   color: var(--gold-600);
 }
 
-/* the plain-language line, so nobody has to infer it */
-.closing__note-plain {
-  font-family: var(--display);
-  font-size: 0.78rem;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-
 /* the watercolour cross above the ceremony details */
 .ceremony__cross {
   width: clamp(6rem, 22vw, 7.5rem);

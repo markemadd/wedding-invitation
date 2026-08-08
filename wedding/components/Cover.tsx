@@ -4,8 +4,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { couple, wedding } from "@/lib/config";
 import crest from "@/public/crest.png";
+import engagement from "@/public/engagement.jpg";
 import monogram from "@/public/monogram.png";
-import { Corner, Divider } from "./Ornaments";
+import { Corner } from "./Ornaments";
 
 /**
  * The gate. Covers the page on load; "Open Invitation" lifts it away and
@@ -35,6 +36,10 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
   return (
     <div className={`cover ${leaving ? "cover--leaving" : ""}`} role="dialog" aria-label="Wedding invitation">
       <div className="cover__card">
+        <span className="cover__photo" aria-hidden="true">
+          <Image src={engagement} alt="" fill priority sizes="(max-width: 30rem) 100vw, 25rem" style={{ objectFit: "cover" }} />
+        </span>
+
         <span className="cover__corner cover__corner--tl"><Corner corner="tl" /></span>
         <span className="cover__corner cover__corner--br"><Corner corner="br" /></span>
 
@@ -74,8 +79,8 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
         </button>
 
         <div className={`cover__body ${envelopeOpen ? "cover__body--shown" : "cover__body--hidden"}`}>
-          {/* the crowned crest frames the couple's own JM monogram */}
-          <div className="crest">
+          {/* the crowned crest frames the couple's own JM monogram, tinted blue */}
+          <div className="crest crest--blue">
             <Image src={crest} alt="" priority sizes="(max-width: 30rem) 62vw, 15rem" />
             <Image
               className="crest__monogram"
@@ -86,20 +91,19 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
             />
           </div>
 
-          <h1 className="cover__names">
-            <span>{couple.first.toUpperCase()}</span>
-            <em className="script">&amp;</em>
-            <span>{couple.second.toUpperCase()}</span>
-          </h1>
+          <p className="cover__eyebrow">The Wedding Of</p>
 
-          <Divider width={150} />
+          <h1 className="cover__names">
+            <span>{couple.first}</span>
+            <em>&amp;</em>
+            <span>{couple.second}</span>
+          </h1>
 
           <p className="cover__date">
             {wedding.dateLabel.month} {wedding.dateLabel.day}, {wedding.dateLabel.year}
           </p>
-          <p className="cover__invited">You&rsquo;re Invited</p>
 
-          <button className="btn" type="button" onClick={open}>
+          <button className="btn btn--quiet cover__open" type="button" onClick={open}>
             Open Invitation
           </button>
         </div>
@@ -141,6 +145,31 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
         @keyframes rise {
           from { opacity: 0; transform: translateY(2.5rem) scale(0.96); }
           to   { opacity: 1; transform: none; }
+        }
+
+        /* the engagement photo, softened behind the letter — the envelope
+           face (opaque) sits above it while closed, so it only reads once
+           the flap has opened. */
+        .cover__photo {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          overflow: hidden;
+        }
+        .cover__photo :global(img) {
+          filter: blur(9px) saturate(0.9);
+          transform: scale(1.15);
+        }
+        .cover__photo::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            180deg,
+            rgba(248, 242, 230, 0.78),
+            rgba(248, 242, 230, 0.86) 45%,
+            rgba(248, 242, 230, 0.93) 100%
+          );
         }
 
         /* ── the closed envelope, over the letter beneath ───────────────
@@ -348,6 +377,11 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
         }
         .crest :global(img) { width: 100%; height: auto; display: block; }
 
+        /* the crest ships gold — shift its hue to a soft blue for this page */
+        .crest--blue > :global(img:first-child) {
+          filter: hue-rotate(155deg) saturate(0.85) brightness(1.04);
+        }
+
         /* sized to sit inside the oval's pearled inner ring */
         .crest :global(img.crest__monogram) {
           position: absolute;
@@ -373,6 +407,7 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
 
         .cover__body {
           position: relative;
+          z-index: 1;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -380,30 +415,43 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           padding-top: 1rem;
         }
 
+        .cover__eyebrow {
+          font-family: var(--display);
+          font-size: 0.8rem;
+          letter-spacing: 0.28em;
+          text-transform: uppercase;
+          color: var(--ink-faint);
+          margin: 0;
+        }
+
         .cover__names {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 0.2rem;
-          font-size: clamp(2.1rem, 9vw, 2.9rem);
-          letter-spacing: 0.08em;
+          gap: 0;
+          font-family: var(--font-script), "Pinyon Script", cursive;
+          font-size: clamp(2.6rem, 12vw, 3.6rem);
+          line-height: 1.15;
           color: var(--gold-700);
         }
         .cover__names em {
-          font-size: 0.62em;
-          letter-spacing: 0;
-          font-weight: 400;
+          font-size: 0.55em;
+          font-style: normal;
+          line-height: 1;
+          margin: 0.1em 0;
         }
 
         .cover__date {
           font-family: var(--display);
-          font-size: 1.3rem;
-          color: var(--ink);
-        }
-        .cover__invited {
-          font-family: var(--display);
-          font-size: 1.2rem;
+          font-size: 1.1rem;
+          letter-spacing: 0.08em;
           color: var(--ink-soft);
+        }
+
+        .cover__open {
+          margin-top: 0.5rem;
+          border-radius: 4px;
+          letter-spacing: 0.22em;
         }
 
         @media (prefers-reduced-motion: reduce) {
