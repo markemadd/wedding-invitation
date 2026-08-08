@@ -477,6 +477,8 @@ textarea { resize: vertical; min-height: 6rem; line-height: 1.6; }
 }
 .datestrip i { width: 1px; height: 2rem; background: var(--hair); }
 
+.datestrip span { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+
 /* ── venue card ─────────────────────────────────────────────────────────── */
 
 .venue-card {

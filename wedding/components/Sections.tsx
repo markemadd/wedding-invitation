@@ -68,8 +68,6 @@ export function CeremonyInfo() {
 
   return (
     <Reveal className="section">
-      <p className="eyebrow eyebrow-rule">Ceremony Info</p>
-
       {hasParents && (
         <>
           <p className="lede">With grateful hearts and great joy, the families of</p>
@@ -89,13 +87,13 @@ export function CeremonyInfo() {
         </>
       )}
 
-      <p className="lede">invite you to attend the wedding of</p>
+      <p className="lede">invite you to attend the wedding of their beloved ones</p>
 
       {/* stacked, so a long name never splits across a line break */}
       <p className="announce">
-        <span>{couple.firstFull}</span>
+        <span>{couple.first}</span>
         <em className="script">&amp;</em>
-        <span>{couple.secondFull}</span>
+        <span>{couple.second}</span>
       </p>
 
       {/* the couple's own watercolour cross, standing where the drawn one was */}
@@ -112,7 +110,7 @@ export function VenueDetails() {
   return (
     <Reveal className="section">
       <Divider width={200} />
-      <p className="eyebrow">Venue Details</p>
+      <p className="eyebrow">Reception to Follow</p>
       <p className="lede">We invite you to celebrate with us at</p>
 
       <div className="card venue-card">
@@ -161,28 +159,21 @@ export function ChurchDetails() {
   const { ceremony } = wedding;
   return (
     <Reveal className="section">
-      <p className="eyebrow eyebrow-rule">Church Details</p>
-      <p className="venue-card__name" style={{ fontFamily: "var(--display)", fontSize: "1.5rem" }}>
-        {ceremony.name}
-      </p>
-      <p className="lede">{ceremony.address}</p>
+      <p className="eyebrow eyebrow-rule">Ceremony Details</p>
+      <p className="lede">Join us for the ceremony at 2 PM</p>
 
-      <div className="map">
-        <iframe
-          title={`Map to ${ceremony.name}`}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          src={`https://maps.google.com/maps?q=${encodeURIComponent(ceremony.mapQuery)}&output=embed`}
-        />
+      <div className="card venue-card">
+        <span className="venue-card__corner"><Corner corner="tr" /></span>
+        <h3 className="venue-card__name">{ceremony.name}</h3>
+        <p className="venue-card__address">{ceremony.address}</p>
+        {ceremony.mapUrl ? (
+          <a className="btn btn--quiet" href={ceremony.mapUrl} target="_blank" rel="noopener noreferrer">
+            Open in Maps
+          </a>
+        ) : (
+          <span className="btn btn--quiet" aria-disabled="true">Directions to come</span>
+        )}
       </div>
-
-      {ceremony.mapUrl ? (
-        <a className="btn btn--quiet" href={ceremony.mapUrl} target="_blank" rel="noopener noreferrer">
-          Open in Maps
-        </a>
-      ) : (
-        <span className="btn btn--quiet" aria-disabled="true">Directions to come</span>
-      )}
     </Reveal>
   );
 }

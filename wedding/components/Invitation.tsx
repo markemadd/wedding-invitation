@@ -4,6 +4,7 @@ import { useState } from "react";
 import { wedding } from "@/lib/config";
 import type { Wish } from "@/lib/supabase";
 import CalendarCard from "./CalendarCard";
+import Countdown from "./Countdown";
 import Cover from "./Cover";
 import MusicToggle from "./MusicToggle";
 import Rsvp from "./Rsvp";
@@ -22,9 +23,10 @@ import {
 
 /**
  * Section order: welcome + envelope (in Hero) → the story → the verse →
- * ceremony info (names) → church details → venue details → the day's
- * schedule (the one place any time appears) → RSVP → gifts → wishes →
- * closing. Church comes before venue because that is the order of the day.
+ * ceremony info (names) → church details → venue details → the calendar →
+ * countdown → the day's schedule (the one place any time appears) → RSVP →
+ * gifts → wishes → closing. Church comes before venue because that is the
+ * order of the day.
  */
 export default function Invitation({ wishes }: { wishes: Wish[] }) {
   const [opened, setOpened] = useState(false);
@@ -41,6 +43,7 @@ export default function Invitation({ wishes }: { wishes: Wish[] }) {
         <ChurchDetails />
         <VenueDetails />
         <CalendarCard />
+        <Countdown />
         <Schedule />
         <Rsvp />
         <Gifts />

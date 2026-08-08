@@ -15,8 +15,8 @@ export const wedding = {
    * bride's side first, then groom's.
    */
   parents: {
-    bride: { title: "Mr.", names: ["Amgad Bahaa"], address: "" },
-    groom: { title: "Mr.", names: ["Emad Garas"], address: "" },
+    bride: { title: "Mr & Mrs", names: ["Amgad Bahaa"], address: "" },
+    groom: { title: "Mr & Mrs", names: ["Emad Garas"], address: "" },
   },
 
   /**
