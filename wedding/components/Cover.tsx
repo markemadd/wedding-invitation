@@ -1,21 +1,18 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { couple, wedding } from "@/lib/config";
-import crest from "@/public/crest.png";
-import engagement from "@/public/engagement.jpg";
-import envelopeClosed from "@/public/envelope-closed.jpg";
-import envelopeOpenImg from "@/public/envelope-open.jpg";
-import monogram from "@/public/monogram.png";
-import { Corner } from "./Ornaments";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * The gate. Covers the page on load; "Open Invitation" lifts it away and
  * releases the scroll — the same beat as the reference template.
+ *
+ * The reveal itself is a supplied video (envelope opening → the couple's
+ * names and date on the letter) rather than a built cover — once it ends,
+ * the same "Open Invitation" button appears over its last frame.
  */
 export default function Cover({ onOpen }: { onOpen: () => void }) {
-  const [envelopeOpen, setEnvelopeOpen] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [videoEnded, setVideoEnded] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const [gone, setGone] = useState(false);
 
@@ -38,81 +35,47 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
   return (
     <div className={`cover ${leaving ? "cover--leaving" : ""}`} role="dialog" aria-label="Wedding invitation">
       <div className="cover__card">
-        <span className="cover__photo" aria-hidden="true">
-          <Image src={engagement} alt="" fill priority sizes="(max-width: 30rem) 100vw, 25rem" style={{ objectFit: "cover" }} />
-        </span>
-
-        <span className="cover__corner cover__corner--tl"><Corner corner="tl" /></span>
-        <span className="cover__corner cover__corner--br"><Corner corner="br" /></span>
-
-        <button
-          type="button"
-          className={`envelope-face ${envelopeOpen ? "envelope-face--open" : ""}`}
-          onClick={() => setEnvelopeOpen(true)}
-          aria-hidden={envelopeOpen}
-          tabIndex={envelopeOpen ? -1 : 0}
-          aria-label="Open the envelope"
-        >
-          {/* the closed photo's own floral backdrop, reused so the open
-              photo's plain white ground has something to blend against */}
-          <span className="envelope-face__backdrop" aria-hidden="true">
-            <Image src={envelopeClosed} alt="" fill sizes="(max-width: 30rem) 100vw, 25rem" style={{ objectFit: "cover" }} />
-          </span>
-          <Image
-            className="envelope-face__img envelope-face__img--closed"
-            src={envelopeClosed}
-            alt=""
-            fill
-            priority
-            sizes="(max-width: 30rem) 100vw, 25rem"
-            style={{ objectFit: "cover" }}
+        <span className="cover__video-wrap">
+          {/* a blurred, cropped copy fills the edges on tall phone screens —
+              the real (uncropped) video sits centered on top of it, so the
+              baked-in text is never cut off the way a single cover-fit
+              video would be against a 16:9 clip */}
+          <video
+            className="cover__video cover__video--bg"
+            src="/envelope-video.mp4"
+            aria-hidden="true"
+            autoPlay
+            muted
+            playsInline
+            preload="auto"
           />
-          <Image
-            className="envelope-face__img envelope-face__img--open"
-            src={envelopeOpenImg}
-            alt=""
-            fill
-            sizes="(max-width: 30rem) 100vw, 25rem"
-            style={{ objectFit: "cover" }}
-          />
-          <span className="envelope-face__scrim" aria-hidden="true" />
 
-          <span className="envelope-face__label">A Wedding Invitation</span>
-          <span className="envelope-face__names">
-            {couple.first} <em className="script">&amp;</em> {couple.second}
-          </span>
-          <span className="envelope-face__tap">Tap to open</span>
-        </button>
-
-        <div className={`cover__body ${envelopeOpen ? "cover__body--shown" : "cover__body--hidden"}`}>
-          {/* the crowned crest frames the couple's own JM monogram, tinted sage */}
-          <div className="crest crest--sage">
-            <Image src={crest} alt="" priority sizes="(max-width: 30rem) 62vw, 15rem" />
-            <Image
-              className="crest__monogram"
-              src={monogram}
-              alt={`${couple.first} and ${couple.second}`}
-              priority
-              sizes="(max-width: 30rem) 22vw, 5.5rem"
+          {/* locked to the video's own 16:9 shape and centered in the wrap,
+              so the button below stays pinned to the real frame edge
+              instead of drifting on screens the video can't cover cleanly */}
+          <span className="cover__frame">
+            <video
+              ref={videoRef}
+              className="cover__video cover__video--fg"
+              src="/envelope-video.mp4"
+              autoPlay
+              muted
+              playsInline
+              preload="auto"
+              onEnded={() => setVideoEnded(true)}
             />
-          </div>
 
-          <p className="cover__eyebrow">The Wedding Of</p>
-
-          <h1 className="cover__names">
-            <span>{couple.first}</span>
-            <em>&amp;</em>
-            <span>{couple.second}</span>
-          </h1>
-
-          <p className="cover__date">
-            {wedding.dateLabel.month} {wedding.dateLabel.day}, {wedding.dateLabel.year}
-          </p>
-
-          <button className="btn btn--quiet cover__open" type="button" onClick={open}>
-            Open Invitation
-          </button>
-        </div>
+            <button
+              type="button"
+              className={`btn btn--quiet cover__open ${videoEnded ? "cover__open--shown" : "cover__open--hidden"}`}
+              onClick={open}
+              aria-hidden={!videoEnded}
+              tabIndex={videoEnded ? 0 : -1}
+            >
+              Open Invitation
+            </button>
+          </span>
+        </span>
       </div>
 
       <style jsx>{`
@@ -137,12 +100,8 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
 
         .cover__card {
           position: relative;
-          width: min(100%, 25rem);
-          min-height: 27rem;
-          padding: clamp(2.5rem, 8vw, 3.5rem) clamp(1.5rem, 6vw, 2.5rem) clamp(2rem, 7vw, 3rem);
+          width: min(94vw, 34rem);
           border-radius: 26px;
-          background: linear-gradient(180deg, #ffffff, var(--ivory));
-          border: 1px solid var(--hair-soft);
           box-shadow: 0 40px 80px -30px rgba(63, 45, 32, 0.45);
           overflow: hidden;
           text-align: center;
@@ -153,242 +112,96 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           to   { opacity: 1; transform: none; }
         }
 
-        /* the engagement photo, softened behind the letter — the envelope
-           face (opaque) sits above it while closed, so it only reads once
-           the flap has opened. */
-        .cover__photo {
-          position: absolute;
-          inset: 0;
-          z-index: 0;
-          overflow: hidden;
-        }
-        .cover__photo :global(img) {
-          filter: blur(5px) saturate(0.9);
-          transform: scale(1.1);
-        }
-        .cover__photo::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            180deg,
-            rgba(248, 242, 230, 0.78),
-            rgba(248, 242, 230, 0.86) 45%,
-            rgba(248, 242, 230, 0.93) 100%
-          );
-        }
-
-        /* ── the closed envelope, over the letter beneath ───────────────
-           The two exact photos supplied: the closed envelope first, then a
-           crossfade to the opened one, held for a beat, before the whole
-           face lifts away and the letter slides up from underneath it. */
-        .envelope-face {
-          position: absolute;
-          inset: 0;
-          z-index: 5;
+        /* the card takes the video's own shape, so nothing is cropped and
+           no white strip is needed beneath it for the button */
+        .cover__video-wrap {
+          position: relative;
           display: block;
-          border: 0;
-          margin: 0;
-          padding: 0;
-          border-radius: inherit;
-          background: var(--card);
-          cursor: pointer;
-          overflow: hidden;
-          transition: opacity 0.6s ease 0.9s, transform 0.6s ease 0.9s;
+          width: 100%;
+          aspect-ratio: 16 / 9;
         }
-        .envelope-face--open {
-          opacity: 0;
-          transform: translateY(-4%);
-          pointer-events: none;
-        }
-
-        /* the closed photo's own floral ground, blurred, sitting behind
-           everything — gives the open photo's white ground something
-           to blend into instead of a plain white flash */
-        .envelope-face__backdrop {
+        .cover__video {
           position: absolute;
           inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .cover__video--bg {
           z-index: 0;
-          overflow: hidden;
-        }
-        :global(.envelope-face__backdrop img) {
-          filter: blur(8px) saturate(1.1) brightness(1.06);
-          transform: scale(1.1);
+          filter: blur(22px) saturate(1.05) brightness(0.95);
+          transform: scale(1.15);
         }
 
-        /* next/image renders a plain <img> for a custom component, which
-           styled-jsx never auto-scopes — these need :global() to bite. */
-        :global(.envelope-face__img) {
-          z-index: 1;
-          transition: opacity 0.7s ease;
-        }
-        :global(.envelope-face__img--closed) { opacity: 1; }
-        :global(.envelope-face__img--open) {
-          opacity: 0;
-          mix-blend-mode: multiply;
-        }
-        :global(.envelope-face--open .envelope-face__img--closed) { opacity: 0; }
-        :global(.envelope-face--open .envelope-face__img--open) { opacity: 1; }
-
-        .envelope-face__scrim {
+        /* on the card, this is just the wrap's own box (already 16:9); the
+           mobile breakpoint below re-sizes it to the video's real rendered
+           edges inside the full-bleed screen, so the button anchored to it
+           never drifts off the actual frame */
+        .cover__frame {
           position: absolute;
           inset: 0;
-          background: linear-gradient(
-            180deg,
-            rgba(38, 30, 20, 0.05) 0%,
-            rgba(38, 30, 20, 0.02) 45%,
-            rgba(38, 30, 20, 0.55) 100%
-          );
         }
-
-        /* champagne — the same warm gold the monogram is struck in, deep
-           enough to still read against the pale floral photo */
-        .envelope-face__label {
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 5.5rem;
-          z-index: 2;
-          font-family: var(--display);
-          font-size: 0.8rem;
-          letter-spacing: 0.22em;
-          text-transform: uppercase;
-          color: var(--gold-700);
-          text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
-        }
-        .envelope-face__names {
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 3.4rem;
-          z-index: 2;
-          font-family: var(--display);
-          font-size: 1.4rem;
-          color: var(--gold-600);
-          text-shadow: 0 1px 4px rgba(255, 255, 255, 0.55);
-        }
-        .envelope-face__names em { font-size: 0.85em; }
-        .envelope-face__tap {
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 1.6rem;
-          z-index: 2;
-          font-size: 0.78rem;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: var(--gold-700);
-          text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
-          animation: tap-pulse 1.8s ease-in-out infinite;
-        }
-        @keyframes tap-pulse {
-          0%, 100% { opacity: 0.55; }
-          50% { opacity: 1; }
-        }
-
-        .cover__body--hidden { opacity: 0; transform: translateY(1.25rem); }
-        .cover__body--shown {
-          opacity: 1;
-          transform: translateY(0);
-          transition: opacity 0.7s ease 0.95s, transform 0.7s ease 0.95s;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .envelope-face, .envelope-face__img, .envelope-face__tap, .cover__body--shown { animation: none; transition: opacity 0.2s linear; }
-        }
-
-        .crest {
-          position: relative;
-          width: min(62%, 15rem);
-          margin-bottom: -0.35rem;
-          animation: crest-in 1.3s cubic-bezier(0.2, 0.7, 0.25, 1) both 0.25s;
-        }
-        .crest :global(img) { width: 100%; height: auto; display: block; }
-
-        /* the crest ships gold — shift its hue to the sage swatch supplied.
-           Also raised above the monogram, so the frame reads in front of
-           the letters instead of the letters sitting on top of it. */
-        .crest--sage > :global(img:first-child) {
-          position: relative;
-          z-index: 2;
-          filter: hue-rotate(72deg) saturate(0.55) brightness(1.12);
-        }
-
-        /* sized to sit inside the oval's pearled inner ring, behind the frame */
-        .crest :global(img.crest__monogram) {
-          position: absolute;
-          top: 46.5%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 37%;
-          height: auto;
+        .cover__video--fg {
           z-index: 1;
         }
 
-        @keyframes crest-in {
-          from { opacity: 0; transform: translateY(1rem) scale(0.94); }
-          to   { opacity: 1; transform: none; }
-        }
-
-        .cover__corner {
-          position: absolute;
-          opacity: 0.85;
-          pointer-events: none;
-        }
-        .cover__corner--tl { top: 0.5rem; left: 0.5rem; }
-        .cover__corner--br { right: 0.5rem; bottom: 0.5rem; }
-
-        .cover__body {
-          position: relative;
-          z-index: 1;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 1.15rem;
-          padding-top: 1rem;
-        }
-
-        .cover__eyebrow {
-          font-family: var(--display);
-          font-size: 0.8rem;
-          letter-spacing: 0.28em;
-          text-transform: uppercase;
-          color: var(--ink-faint);
-          margin: 0;
-        }
-
-        .cover__names {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0;
-          font-family: var(--font-script), "Pinyon Script", cursive;
-          font-size: clamp(2.6rem, 12vw, 3.6rem);
-          line-height: 1.15;
-          color: var(--gold-700);
-        }
-        .cover__names em {
-          font-size: 0.55em;
-          font-style: normal;
-          line-height: 1;
-          margin: 0.1em 0;
-        }
-
-        .cover__date {
-          font-family: var(--display);
-          font-size: 1.1rem;
-          letter-spacing: 0.08em;
-          color: var(--ink-soft);
-        }
-
+        /* sits over the clear ground beneath the baked-in date */
         .cover__open {
-          margin-top: 0.5rem;
+          position: absolute;
+          left: 50%;
+          bottom: 6.5%;
+          transform: translate(-50%, 0.5rem);
           border-radius: 4px;
-          letter-spacing: 0.22em;
+          padding: 0 1.3rem;
+          min-height: 2.5rem;
+          font-size: 0.8rem;
+          letter-spacing: 0.2em;
+          background: rgba(248, 242, 230, 0.9);
+          backdrop-filter: blur(2px);
+          box-shadow: 0 6px 16px -6px rgba(38, 30, 20, 0.35);
+          opacity: 0;
+          transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
+        }
+        .cover__open--hidden { pointer-events: none; }
+        .cover__open--shown {
+          opacity: 1;
+          transform: translate(-50%, 0);
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .cover, .cover__card, .crest { animation: none; transition: opacity 0.2s linear; }
+          .cover, .cover__card, .cover__open { animation: none; transition: opacity 0.2s linear; }
+        }
+
+        /* on phones, drop the card entirely — the video fills the screen */
+        @media (max-width: 30rem) {
+          .cover { padding: 0; }
+          .cover__card {
+            width: 100vw;
+            height: 100dvh;
+            border-radius: 0;
+            box-shadow: none;
+          }
+          .cover__video-wrap {
+            height: 100%;
+            aspect-ratio: auto;
+          }
+          /* the wrap now equals the viewport, so this pure-CSS "contain"
+             formula sizes the frame to the video's true rendered box */
+          .cover__frame {
+            inset: auto;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(100vw, calc(100dvh * 16 / 9));
+            height: min(100dvh, calc(100vw * 9 / 16));
+          }
+          /* feathers the sharp video's edge into the blurred fill behind
+             it, instead of a hard rectangle floating over soft blur — kept
+             off the button (a sibling) so it never fades with it */
+          .cover__video--fg {
+            mask-image: radial-gradient(ellipse 78% 78% at 50% 50%, #000 65%, transparent 100%);
+            -webkit-mask-image: radial-gradient(ellipse 78% 78% at 50% 50%, #000 65%, transparent 100%);
+          }
         }
       `}</style>
     </div>
