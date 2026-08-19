@@ -1,31 +1,37 @@
 -- ============================================================================
---  Maria & Joseph — RSVP schema
+--  Joseph & Maria — guest list + RSVP schema
 --  Run this once in the Supabase SQL editor (Dashboard → SQL → New query).
 -- ============================================================================
 
+create extension if not exists pg_trgm;
+create extension if not exists "pgcrypto";
+
 -- ── guests ──────────────────────────────────────────────────────────────────
--- One row per invitation (a household), not per person.
+-- One row per PERSON (not per household). Linked people — a couple, a family —
+-- share a family_id. A solo guest gets a family_id equal to nobody else's,
+-- i.e. a "family" of one; this keeps the RSVP flow (and every query) uniform
+-- instead of having to special-case guests with no listed family.
 create table if not exists public.guests (
   id          uuid primary key default gen_random_uuid(),
-  name        text not null,                 -- as printed on the invitation
-  seats       int  not null default 2 check (seats between 1 and 20),
-  aliases     text[] not null default '{}',  -- extra spellings so search finds them
-  side        text check (side in ('bride', 'groom', 'both')),
-  phone       text,
+  name        text not null,
+  family_id   uuid not null default gen_random_uuid(),
   created_at  timestamptz not null default now()
 );
 
--- Fuzzy substring search over the printed name (aliases are matched in SQL too).
-create extension if not exists pg_trgm;
+-- Fuzzy substring search over the name, so "Mark" finds every Mark.
 create index if not exists guests_name_trgm_idx
   on public.guests using gin (lower(name) gin_trgm_ops);
+create index if not exists guests_family_idx on public.guests (family_id);
 
 -- ── rsvps ───────────────────────────────────────────────────────────────────
--- One row per guest. A guest who replies twice updates their row.
+-- One row per guest, so each person in a family can be marked attending or
+-- not individually. `note` is the one shared message the family leaves when
+-- they reply together — it's written identically onto every row in that
+-- family's submission, which keeps the query for "show me a family's reply"
+-- a single indexed lookup instead of a join into a separate notes table.
 create table if not exists public.rsvps (
   guest_id    uuid primary key references public.guests(id) on delete cascade,
   attending   boolean not null,
-  party_size  int not null default 0 check (party_size >= 0),
   note        text,
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
@@ -42,24 +48,9 @@ drop trigger if exists rsvps_touch on public.rsvps;
 create trigger rsvps_touch before update on public.rsvps
   for each row execute function public.touch_updated_at();
 
--- A party can never exceed the seats on the invitation.
-create or replace function public.check_party_size()
-returns trigger language plpgsql as $$
-declare allowed int;
-begin
-  select seats into allowed from public.guests where id = new.guest_id;
-  if new.attending and new.party_size > allowed then
-    raise exception 'party_size % exceeds the % seat(s) on this invitation',
-      new.party_size, allowed;
-  end if;
-  return new;
-end $$;
-
-drop trigger if exists rsvps_party_size on public.rsvps;
-create trigger rsvps_party_size before insert or update on public.rsvps
-  for each row execute function public.check_party_size();
-
 -- ── wishes ──────────────────────────────────────────────────────────────────
+-- Unrelated to the RSVP note above — this is the separate public guestbook
+-- wall on the site.
 create table if not exists public.wishes (
   id          uuid primary key default gen_random_uuid(),
   name        text not null check (char_length(name) between 1 and 80),
@@ -78,13 +69,3 @@ alter table public.rsvps  enable row level security;
 alter table public.wishes enable row level security;
 
 -- (No policies = no anon access. The service role bypasses RLS by design.)
-
--- ── headcount view, for the admin page ──────────────────────────────────────
-create or replace view public.rsvp_summary as
-select
-  count(*) filter (where r.attending)                        as households_yes,
-  count(*) filter (where not r.attending)                    as households_no,
-  coalesce(sum(r.party_size) filter (where r.attending), 0)  as guests_coming,
-  (select count(*) from public.guests)                       as households_invited,
-  (select coalesce(sum(seats), 0) from public.guests)        as seats_invited
-from public.rsvps r;

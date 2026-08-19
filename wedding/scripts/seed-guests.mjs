@@ -1,21 +1,27 @@
 /**
- * Loads the guest list into Supabase from a CSV.
+ * Loads the guest list into Supabase from the wedding's .xlsx export.
  *
- *   node scripts/seed-guests.mjs guests.csv
+ *   node scripts/seed-guests.mjs "Wedding Guest List.xlsx"
  *
- * CSV columns (header row required):
- *   name,seats,aliases,side,phone
+ * Expected columns: Name, Families.
+ *   name     — exactly as it should appear when someone searches for themself
+ *   families — filled in on ONE row per linked group, e.g.
+ *              "Menna Ghalwash & Amr Abdelghani" — everyone else in that
+ *              group leaves Families blank. A name with no Families entry
+ *              (anywhere) is treated as a solo guest.
  *
- *   name    — exactly as printed on the invitation, e.g. "Mr. & Mrs. Nabil Boutros"
- *   seats   — how many people that invitation covers
- *   aliases — optional, semicolon-separated extra spellings: "Nabil;Boutros"
- *   side    — optional: bride | groom | both
- *   phone   — optional
+ * A name mentioned only inside a Families cell (e.g. a plus-one like
+ * "Salwa +1" with no row of its own) still gets its own guest record.
  *
  * Re-running is safe: a name that already exists is updated, not duplicated.
+ * The .xlsx itself is never committed to the repo — it's read from wherever
+ * you point this script at it.
  */
 
-import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+import { randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 
 const url = process.env.SUPABASE_URL;
@@ -27,57 +33,91 @@ if (!url || !key) {
   process.exit(1);
 }
 if (!file) {
-  console.error("Usage: node scripts/seed-guests.mjs guests.csv");
+  console.error('Usage: node scripts/seed-guests.mjs "Wedding Guest List.xlsx"');
   process.exit(1);
 }
 
-/** Minimal CSV reader — handles quoted fields and embedded commas. */
-function parseCsv(text) {
-  const rows = [];
-  let row = [];
-  let cell = "";
-  let quoted = false;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const reader = path.join(__dirname, "read-xlsx.py");
 
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    if (quoted) {
-      if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
-      else if (c === '"') quoted = false;
-      else cell += c;
-    } else if (c === '"') quoted = true;
-    else if (c === ",") { row.push(cell); cell = ""; }
-    else if (c === "\n") { row.push(cell); rows.push(row); row = []; cell = ""; }
-    else if (c !== "\r") cell += c;
-  }
-  if (cell || row.length) { row.push(cell); rows.push(row); }
-  return rows.filter((r) => r.some((v) => v.trim()));
+let rows;
+try {
+  const json = execFileSync("python3", [reader, file], { encoding: "utf8", maxBuffer: 16 * 1024 * 1024 });
+  rows = JSON.parse(json);
+} catch (err) {
+  console.error("Could not read the .xlsx file:", err.message);
+  process.exit(1);
 }
 
-const rows = parseCsv(readFileSync(file, "utf8"));
-const header = rows.shift().map((h) => h.trim().toLowerCase());
-const col = (name) => header.indexOf(name);
+if (!rows.length) {
+  console.error("No rows with a name were found in that file.");
+  process.exit(1);
+}
 
-const guests = rows.map((r) => {
-  const seats = Number(r[col("seats")]) || 1;
-  const aliases = (col("aliases") > -1 ? r[col("aliases")] : "")
-    .split(";")
+/* ── union-find over names, merged by shared Families cells ────────────── */
+
+const parent = new Map(); // normalized name -> normalized name
+const display = new Map(); // normalized name -> the name as it should be shown
+
+function norm(name) {
+  return name.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+function register(name) {
+  const clean = name.trim().replace(/\s+/g, " ");
+  const key = norm(clean);
+  if (!parent.has(key)) {
+    parent.set(key, key);
+    display.set(key, clean);
+  }
+  return key;
+}
+
+function find(key) {
+  while (parent.get(key) !== key) {
+    parent.set(key, parent.get(parent.get(key)));
+    key = parent.get(key);
+  }
+  return key;
+}
+
+function union(a, b) {
+  const ra = find(a);
+  const rb = find(b);
+  if (ra !== rb) parent.set(ra, rb);
+}
+
+for (const row of rows) {
+  const selfKey = register(row.name);
+  if (!row.families) continue;
+
+  const members = row.families
+    .split("&")
     .map((s) => s.trim())
     .filter(Boolean);
 
-  return {
-    name: r[col("name")].trim(),
-    seats,
-    aliases,
-    side: col("side") > -1 ? r[col("side")].trim() || null : null,
-    phone: col("phone") > -1 ? r[col("phone")].trim() || null : null,
-  };
-});
-
-const bad = guests.filter((g) => !g.name);
-if (bad.length) {
-  console.error(`${bad.length} row(s) have no name — fix the CSV and try again.`);
-  process.exit(1);
+  const keys = members.map(register);
+  for (const k of keys) union(selfKey, k);
 }
+
+/* ── group into families, assign one family_id per group ────────────────── */
+
+const groups = new Map(); // root key -> array of display names
+for (const key of parent.keys()) {
+  const root = find(key);
+  if (!groups.has(root)) groups.set(root, []);
+  groups.get(root).push(display.get(key));
+}
+
+const guests = [];
+for (const members of groups.values()) {
+  const family_id = randomUUID();
+  for (const name of members) guests.push({ name, family_id });
+}
+
+console.log(`${guests.length} guests across ${groups.size} families in the file.`);
+
+/* ── upsert ──────────────────────────────────────────────────────────────── */
 
 const supabase = createClient(url, key, { auth: { persistSession: false } });
 
@@ -95,7 +135,7 @@ let updated = 0;
 for (const g of guests) {
   const id = byName.get(g.name.toLowerCase());
   const { error } = id
-    ? await supabase.from("guests").update(g).eq("id", id)
+    ? await supabase.from("guests").update({ name: g.name, family_id: g.family_id }).eq("id", id)
     : await supabase.from("guests").insert(g);
 
   if (error) {
@@ -105,4 +145,4 @@ for (const g of guests) {
   id ? updated++ : inserted++;
 }
 
-console.log(`${inserted} added, ${updated} updated, ${guests.length} rows in the file.`);
+console.log(`${inserted} added, ${updated} updated, ${guests.length} guests in the file.`);

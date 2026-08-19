@@ -4,10 +4,12 @@ import { revalidatePath } from "next/cache";
 import { db, dbConfigured, type Guest, type Wish } from "@/lib/supabase";
 
 /* ── guest lookup ──────────────────────────────────────────────────────────
-   Returns at most six matches. Nothing is returned for a query shorter than
-   two characters, so the list can't be walked by typing a single letter.      */
+   Returns at most eight matches, one per person (not per family) — typing
+   "Mark" should surface every Mark so the guest can tell them apart and pick
+   themself. Nothing is returned for a query shorter than two characters, so
+   the list can't be walked by typing a single letter.                        */
 
-export type GuestMatch = { id: string; name: string; seats: number; replied: boolean };
+export type GuestMatch = { id: string; name: string; familyId: string; replied: boolean };
 
 export async function searchGuests(term: string): Promise<GuestMatch[]> {
   const q = term.trim();
@@ -16,9 +18,10 @@ export async function searchGuests(term: string): Promise<GuestMatch[]> {
   const like = `%${q.replace(/[%_]/g, "")}%`;
   const { data, error } = await db()
     .from("guests")
-    .select("id, name, seats, aliases, rsvps(attending)")
-    .or(`name.ilike.${like},aliases.cs.{${q}}`)
-    .limit(6);
+    .select("id, name, family_id, rsvps(attending)")
+    .ilike("name", like)
+    .order("name")
+    .limit(8);
 
   if (error) {
     console.error("guest search failed:", error.message);
@@ -28,48 +31,70 @@ export async function searchGuests(term: string): Promise<GuestMatch[]> {
   return (data ?? []).map((g: any) => ({
     id: g.id,
     name: g.name,
-    seats: g.seats,
+    familyId: g.family_id,
     replied: Array.isArray(g.rsvps) ? g.rsvps.length > 0 : Boolean(g.rsvps),
   }));
 }
 
+/* ── family lookup ────────────────────────────────────────────────────────
+   Once a guest picks themself, this loads everyone who shares their
+   family_id (a solo guest just gets a family of one) plus whatever they've
+   already replied, so re-opening the RSVP shows their previous answers
+   instead of a blank form.                                                  */
+
+export type FamilyMember = { id: string; name: string; attending: boolean | null };
+
+export async function getFamily(guestId: string): Promise<{ members: FamilyMember[]; note: string } | null> {
+  if (!dbConfigured()) return null;
+
+  const { data: guest, error: guestError } = await db()
+    .from("guests")
+    .select("family_id")
+    .eq("id", guestId)
+    .single();
+
+  if (guestError || !guest) return null;
+
+  const { data, error } = await db()
+    .from("guests")
+    .select("id, name, rsvps(attending, note)")
+    .eq("family_id", guest.family_id)
+    .order("name");
+
+  if (error) {
+    console.error("family lookup failed:", error.message);
+    return null;
+  }
+
+  let note = "";
+  const members = (data ?? []).map((g: any) => {
+    const rsvp = Array.isArray(g.rsvps) ? g.rsvps[0] : g.rsvps;
+    if (rsvp?.note) note = rsvp.note;
+    return { id: g.id, name: g.name, attending: rsvp ? rsvp.attending : null };
+  });
+
+  return { members, note };
+}
+
 /* ── rsvp ─────────────────────────────────────────────────────────────────── */
 
-export type RsvpResult = { ok: true; attending: boolean; party: number } | { ok: false; error: string };
+export type RsvpResult = { ok: true } | { ok: false; error: string };
 
 export async function submitRsvp(input: {
-  guestId: string;
-  attending: boolean;
-  partySize: number;
+  responses: { guestId: string; attending: boolean }[];
   note: string;
 }): Promise<RsvpResult> {
   if (!dbConfigured()) {
     return { ok: false, error: "The RSVP list isn't connected yet. Please try again later." };
   }
-
-  const { data: guest, error: lookupError } = await db()
-    .from("guests")
-    .select("id, seats")
-    .eq("id", input.guestId)
-    .single();
-
-  if (lookupError || !guest) {
-    return { ok: false, error: "We couldn't find that invitation. Please search for your name again." };
+  if (!input.responses.length) {
+    return { ok: false, error: "Let us know whether each person is coming." };
   }
 
-  const party = input.attending
-    ? Math.min(Math.max(1, Math.floor(input.partySize)), guest.seats)
-    : 0;
+  const note = input.note.trim().slice(0, 600) || null;
+  const rows = input.responses.map((r) => ({ guest_id: r.guestId, attending: r.attending, note }));
 
-  const { error } = await db().from("rsvps").upsert(
-    {
-      guest_id: guest.id,
-      attending: input.attending,
-      party_size: party,
-      note: input.note.trim().slice(0, 600) || null,
-    },
-    { onConflict: "guest_id" }
-  );
+  const { error } = await db().from("rsvps").upsert(rows, { onConflict: "guest_id" });
 
   if (error) {
     console.error("rsvp write failed:", error.message);
@@ -77,7 +102,7 @@ export async function submitRsvp(input: {
   }
 
   revalidatePath("/admin");
-  return { ok: true, attending: input.attending, party };
+  return { ok: true };
 }
 
 /* ── wishes ───────────────────────────────────────────────────────────────── */

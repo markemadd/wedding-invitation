@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { searchGuests, submitRsvp, type GuestMatch } from "@/app/actions";
+import { getFamily, searchGuests, submitRsvp, type FamilyMember, type GuestMatch } from "@/app/actions";
 import { wedding } from "@/lib/config";
 import { Cross, Divider } from "./Ornaments";
 import Reveal from "./Reveal";
@@ -13,9 +13,9 @@ export default function Rsvp() {
   const [term, setTerm] = useState("");
   const [matches, setMatches] = useState<GuestMatch[]>([]);
   const [searching, setSearching] = useState(false);
-  const [guest, setGuest] = useState<GuestMatch | null>(null);
-  const [attending, setAttending] = useState<boolean | null>(null);
-  const [party, setParty] = useState(1);
+  const [loadingFamily, setLoadingFamily] = useState(false);
+  const [members, setMembers] = useState<FamilyMember[]>([]);
+  const [attending, setAttending] = useState<Record<string, boolean>>({});
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
   const [pending, start] = useTransition();
@@ -42,29 +42,46 @@ export default function Rsvp() {
     return () => window.clearTimeout(t);
   }, [term]);
 
-  function choose(g: GuestMatch) {
-    setGuest(g);
-    setAttending(null);
-    setParty(g.seats);
-    setNote("");
+  async function choose(g: GuestMatch) {
     setError("");
+    setLoadingFamily(true);
     setStep("confirm");
     window.setTimeout(
       () => confirmRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }),
       60
     );
+
+    const family = await getFamily(g.id);
+    setLoadingFamily(false);
+
+    if (!family) {
+      setError("We couldn't load that invitation. Please search for your name again.");
+      setStep("search");
+      return;
+    }
+
+    setMembers(family.members);
+    setNote(family.note);
+    setAttending(
+      Object.fromEntries(
+        family.members.filter((m) => m.attending !== null).map((m) => [m.id, m.attending as boolean])
+      )
+    );
   }
 
   function send() {
-    if (!guest || attending === null) return;
+    const responses = members
+      .filter((m) => attending[m.id] !== undefined)
+      .map((m) => ({ guestId: m.id, attending: attending[m.id] }));
+
+    if (responses.length < members.length) {
+      setError("Let us know whether each person will be joining, then send your reply.");
+      return;
+    }
+
     setError("");
     start(async () => {
-      const res = await submitRsvp({
-        guestId: guest.id,
-        attending,
-        partySize: attending ? party : 0,
-        note,
-      });
+      const res = await submitRsvp({ responses, note });
       if (res.ok) setStep("done");
       else setError(res.error);
     });
@@ -74,17 +91,21 @@ export default function Rsvp() {
     setStep("search");
     setTerm("");
     setMatches([]);
-    setGuest(null);
-    setAttending(null);
+    setMembers([]);
+    setAttending({});
+    setNote("");
     setError("");
   }
+
+  const coming = members.filter((m) => attending[m.id] === true).map((m) => m.name);
+  const notComing = members.filter((m) => attending[m.id] === false).map((m) => m.name);
 
   return (
     <Reveal className="section" >
       <div id="rsvp" className="anchor" />
       <p className="eyebrow eyebrow-rule">RSVP</p>
       <p className="lede">
-        Find the name on your invitation and let us know if you can join us.
+        Find your name and let us know if you and your family can join us.
         Kindly reply by <strong>{wedding.rsvpBy}</strong>.
       </p>
 
@@ -100,7 +121,7 @@ export default function Rsvp() {
                 spellCheck={false}
                 value={term}
                 onChange={(e) => setTerm(e.target.value)}
-                placeholder="Start typing your name or family name"
+                placeholder="Start typing your first name"
               />
             </div>
 
@@ -112,10 +133,7 @@ export default function Rsvp() {
                   <li key={m.id}>
                     <button type="button" onClick={() => choose(m)}>
                       <span>{m.name}</span>
-                      <em>
-                        {m.seats} {m.seats === 1 ? "seat" : "seats"}
-                        {m.replied ? " · replied" : ""}
-                      </em>
+                      {m.replied && <em>replied</em>}
                     </button>
                   </li>
                 ))}
@@ -124,68 +142,64 @@ export default function Rsvp() {
 
             {!searching && term.trim().length >= 2 && matches.length === 0 && (
               <p className="rsvp__hint">
-                We can&rsquo;t find that name. Try your family name, or the name exactly
-                as it appears on your invitation.
+                We can&rsquo;t find that name. Try a different spelling, or the name
+                exactly as it appears on your invitation.
               </p>
             )}
           </div>
         )}
 
-        {step === "confirm" && guest && (
+        {step === "confirm" && (
           <div className="rsvp__step" ref={confirmRef}>
-            <p className="rsvp__name">{guest.name}</p>
-            <p className="rsvp__seats">
-              Your invitation is for {guest.seats} {guest.seats === 1 ? "guest" : "guests"}
-            </p>
+            {loadingFamily && <p className="rsvp__hint">Loading your invitation&hellip;</p>}
 
-            <div className="field">
-              <label id="attend-label">Will you be joining us?</label>
-              <div className="choice" role="group" aria-labelledby="attend-label">
-                <button
-                  type="button"
-                  aria-pressed={attending === true}
-                  onClick={() => setAttending(true)}
-                >
-                  Joyfully accepts
-                </button>
-                <button
-                  type="button"
-                  aria-pressed={attending === false}
-                  onClick={() => setAttending(false)}
-                >
-                  Regretfully declines
-                </button>
-              </div>
-            </div>
-
-            {attending === true && guest.seats > 1 && (
-              <div className="field">
-                <label htmlFor="party">How many of you?</label>
-                <select id="party" value={party} onChange={(e) => setParty(Number(e.target.value))}>
-                  {Array.from({ length: guest.seats }, (_, i) => i + 1).map((n) => (
-                    <option key={n} value={n}>
-                      {n === 1 ? "Just me" : `${n} of us`}
-                    </option>
+            {!loadingFamily && members.length > 0 && (
+              <>
+                <p className="rsvp__name">Will you be joining us?</p>
+                <ul className="rsvp__family">
+                  {members.map((m) => (
+                    <li key={m.id} className="rsvp__member">
+                      <span className="rsvp__member-name">{m.name}</span>
+                      <span className="rsvp__member-choice" role="group" aria-label={`Is ${m.name} attending?`}>
+                        <button
+                          type="button"
+                          aria-pressed={attending[m.id] === true}
+                          onClick={() => setAttending((a) => ({ ...a, [m.id]: true }))}
+                        >
+                          Yes
+                        </button>
+                        <button
+                          type="button"
+                          aria-pressed={attending[m.id] === false}
+                          onClick={() => setAttending((a) => ({ ...a, [m.id]: false }))}
+                        >
+                          No
+                        </button>
+                      </span>
+                    </li>
                   ))}
-                </select>
-              </div>
+                </ul>
+
+                <div className="field">
+                  <label htmlFor="note">Leave a note for the couple (optional)</label>
+                  <textarea
+                    id="note"
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder="Can't wait! / So excited!!"
+                  />
+                </div>
+
+                {error && <p className="rsvp__error">{error}</p>}
+
+                <button className="btn" type="button" disabled={pending} onClick={send}>
+                  {pending ? "Sending…" : "Send our reply"}
+                </button>
+              </>
             )}
 
-            <div className="field">
-              <label htmlFor="note">A note for the couple (optional)</label>
-              <textarea
-                id="note"
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Dietary needs, a blessing, anything you'd like us to know."
-              />
-            </div>
+            {!loadingFamily && members.length === 0 && error && <p className="rsvp__error">{error}</p>}
 
-            {error && <p className="rsvp__error">{error}</p>}
-
-            <button className="btn" type="button" disabled={attending === null || pending} onClick={send}>
-              {pending ? "Sending…" : "Send our reply"}
-            </button>
             <button className="link-underline" type="button" onClick={restart}>
               That&rsquo;s not me — search again
             </button>
@@ -195,12 +209,15 @@ export default function Rsvp() {
         {step === "done" && (
           <div className="rsvp__step rsvp__done">
             <Cross size={34} />
-            <h3 className="rsvp__name">{attending ? "Wonderful" : "We’ll miss you"}</h3>
-            <p className="lede">
-              {attending
-                ? `We have you down for ${party} ${party === 1 ? "seat" : "seats"}. See you on the 26th.`
-                : "Thank you for letting us know — you'll be in our thoughts on the day."}
-            </p>
+            <h3 className="rsvp__name">Thank you</h3>
+            {coming.length > 0 && (
+              <p className="lede">
+                {coming.join(", ")} {coming.length === 1 ? "is" : "are"} down to celebrate with us on the 26th.
+              </p>
+            )}
+            {notComing.length > 0 && (
+              <p className="lede">{notComing.join(", ")} will be missed — thank you for letting us know.</p>
+            )}
             <button className="link-underline" type="button" onClick={restart}>
               Change your reply
             </button>

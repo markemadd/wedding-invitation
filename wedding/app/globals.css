@@ -687,6 +687,44 @@ textarea { resize: vertical; min-height: 6rem; line-height: 1.6; }
 .rsvp__seats { font-size: 0.95rem; color: var(--ink-faint); text-align: center; }
 .rsvp__done { padding: 1rem 0; }
 
+.rsvp__family {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  border: 1px solid var(--hair-soft);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.rsvp__member {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+}
+.rsvp__member + .rsvp__member { border-top: 1px solid var(--hair-soft); }
+.rsvp__member-name { font-family: var(--display); font-size: 1.05rem; color: var(--ink); }
+.rsvp__member-choice { display: flex; gap: 0.4rem; flex: none; }
+.rsvp__member-choice button {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink-soft);
+  font-family: var(--display);
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.rsvp__member-choice button[aria-pressed="true"] {
+  border-color: var(--peach-500);
+  background: var(--peach-200);
+  color: var(--gold-800);
+  font-weight: 600;
+}
+
 .choice { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
 .choice button {
   padding: 0.85rem 0.5rem;
@@ -814,6 +852,51 @@ textarea { resize: vertical; min-height: 6rem; line-height: 1.6; }
 .pill--yes { background: var(--peach-200); color: var(--gold-800); }
 .pill--no  { background: #F6E9E6; color: #9A3B2F; }
 .pill--none { background: var(--ivory-dim); color: var(--ink-faint); }
+
+.admin__chart {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--hair-soft);
+  border-radius: 16px;
+  background: var(--card);
+}
+.admin__chart-num { font-family: var(--display); font-size: 1.7rem; fill: var(--gold-700); }
+.admin__chart-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; fill: var(--ink-faint); }
+.admin__legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+.admin__legend li { font-size: 0.92rem; color: var(--ink-soft); display: flex; align-items: center; gap: 0.5rem; }
+.admin__legend strong { color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
+.admin__swatch { width: 0.8rem; height: 0.8rem; border-radius: 3px; flex: none; }
+
+.admin__filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.admin__filter-pills { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.admin__filter-pill {
+  border: 1px solid var(--hair-soft);
+  background: var(--card);
+  color: var(--ink-soft);
+  text-decoration: none;
+  cursor: pointer;
+}
+.admin__filter-pill.is-active { background: var(--gold-700); color: var(--ivory); border-color: var(--gold-700); }
+.admin__filters input[type="search"] {
+  flex: 1;
+  min-width: 10rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--hair-soft);
+  border-radius: 999px;
+  font-family: var(--body);
+  font-size: 0.92rem;
+  background: var(--card);
+}
 
 /* ── numerals ────────────────────────────────────────────────────────────
    Cormorant and EB Garamond default to old-style figures, which turn "14:00"

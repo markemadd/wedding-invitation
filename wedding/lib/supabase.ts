@@ -35,8 +35,7 @@ export function dbConfigured(): boolean {
 export type Guest = {
   id: string;
   name: string;
-  seats: number;
-  aliases: string[];
+  family_id: string;
 };
 
 export type Wish = {
