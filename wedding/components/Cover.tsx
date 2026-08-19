@@ -46,7 +46,10 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
 
         <button type="button" className="cover__envelope" onClick={open} aria-label="Open the invitation">
           <Image src={landingEnvelope} alt="" priority sizes="(max-width: 30rem) 82vw, 24rem" />
-          <span className="cover__monogram">{couple.first[0]}</span>
+          <span className="cover__monogram">
+            {couple.first[0]}
+            {couple.second[0]}
+          </span>
           <Image className="cover__seal" src={landingSeal} alt="" sizes="4.5rem" />
           <Image className="cover__sprig" src={landingSprig} alt="" sizes="7rem" />
         </button>
@@ -133,46 +136,61 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
 
         .cover__monogram {
           position: absolute;
-          top: 22%;
+          top: 26%;
           left: 50%;
           transform: translate(-50%, -50%);
           font-family: var(--font-script), "Pinyon Script", cursive;
-          font-size: 1.6rem;
+          font-size: 1.75rem;
+          letter-spacing: 0.04em;
           color: rgba(255, 255, 255, 0.92);
         }
 
         /* next/image renders a plain <img> for a custom component, which
-           styled-jsx never auto-scopes — these need :global() to bite */
+           styled-jsx never auto-scopes — these need :global() to bite.
+           The image is cropped to the envelope itself (no transparent
+           padding), so these percentages land on the artwork: the lace V
+           meets at 50.2% / 70%, and the seal straddles that junction. */
         :global(.cover__seal) {
           position: absolute !important;
-          top: 46%;
-          left: 50%;
+          top: 67%;
+          left: 50.2%;
           transform: translate(-50%, -50%);
           width: 3.6rem !important;
           height: auto !important;
           filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
         }
 
+        /* tucked against the envelope's left edge, half on the paper and
+           half on the landscape, as in the reference */
         :global(.cover__sprig) {
           position: absolute !important;
-          left: -8%;
-          bottom: -10%;
-          width: 7.5rem !important;
+          left: -11%;
+          top: 16%;
+          width: 3.6rem !important;
           height: auto !important;
-          transform: rotate(-8deg);
+          transform: rotate(-10deg);
         }
 
+        /* the painted background is pale and busy here, so the label gets a
+           tinted plate of its own rather than sitting bare on the sky */
         .cover__open {
-          border: 0;
-          background: none;
-          padding: 0.4rem 0;
+          border: 1px solid rgba(28, 42, 36, 0.25);
+          border-radius: 2px;
+          background: rgba(248, 244, 234, 0.82);
+          backdrop-filter: blur(3px);
+          padding: 0.7rem 1.6rem;
           font-family: var(--display);
           font-size: 0.85rem;
+          font-weight: 600;
           letter-spacing: 0.2em;
           text-transform: uppercase;
-          color: #3a4a52;
-          border-bottom: 1px solid rgba(58, 74, 82, 0.4);
+          color: #26342a;
           cursor: pointer;
+          transition: background 0.25s ease, color 0.25s ease;
+        }
+        .cover__open:hover {
+          background: #26342a;
+          color: var(--ivory);
         }
 
         @media (prefers-reduced-motion: reduce) {
