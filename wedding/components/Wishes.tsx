@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { sendWish, listWishes } from "@/app/actions";
-import type { Wish } from "@/lib/supabase";
+import type { Wish } from "@/lib/db";
 import { Corner } from "./Ornaments";
 import Reveal from "./Reveal";
 

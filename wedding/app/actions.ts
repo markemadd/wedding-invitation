@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { db, dbConfigured, type Guest, type Wish } from "@/lib/supabase";
+import { dbConfigured, sql, type Wish } from "@/lib/db";
 
 /* ── guest lookup ──────────────────────────────────────────────────────────
    Returns at most eight matches, one per person (not per family) — typing
@@ -15,25 +15,28 @@ export async function searchGuests(term: string): Promise<GuestMatch[]> {
   const q = term.trim();
   if (q.length < 2 || !dbConfigured()) return [];
 
-  const like = `%${q.replace(/[%_]/g, "")}%`;
-  const { data, error } = await db()
-    .from("guests")
-    .select("id, name, family_id, rsvps(attending)")
-    .ilike("name", like)
-    .order("name")
-    .limit(8);
+  try {
+    const rows = (await sql()`
+      select g.id, g.name, g.family_id, (r.guest_id is not null) as replied
+      from guests g
+      left join rsvps r on r.guest_id = g.id
+      where g.name ilike ${"%" + q + "%"}
+      order by
+        case when g.name ilike ${q + "%"} then 0 else 1 end,
+        g.name
+      limit 8
+    `) as any[];
 
-  if (error) {
-    console.error("guest search failed:", error.message);
+    return rows.map((g) => ({
+      id: g.id,
+      name: g.name,
+      familyId: g.family_id,
+      replied: g.replied,
+    }));
+  } catch (err) {
+    console.error("guest search failed:", err);
     return [];
   }
-
-  return (data ?? []).map((g: any) => ({
-    id: g.id,
-    name: g.name,
-    familyId: g.family_id,
-    replied: Array.isArray(g.rsvps) ? g.rsvps.length > 0 : Boolean(g.rsvps),
-  }));
 }
 
 /* ── family lookup ────────────────────────────────────────────────────────
@@ -47,33 +50,28 @@ export type FamilyMember = { id: string; name: string; attending: boolean | null
 export async function getFamily(guestId: string): Promise<{ members: FamilyMember[]; note: string } | null> {
   if (!dbConfigured()) return null;
 
-  const { data: guest, error: guestError } = await db()
-    .from("guests")
-    .select("family_id")
-    .eq("id", guestId)
-    .single();
+  try {
+    const rows = (await sql()`
+      select g.id, g.name, r.attending, r.note
+      from guests g
+      left join rsvps r on r.guest_id = g.id
+      where g.family_id = (select family_id from guests where id = ${guestId})
+      order by g.name
+    `) as any[];
 
-  if (guestError || !guest) return null;
+    if (!rows.length) return null;
 
-  const { data, error } = await db()
-    .from("guests")
-    .select("id, name, rsvps(attending, note)")
-    .eq("family_id", guest.family_id)
-    .order("name");
+    let note = "";
+    const members = rows.map((g) => {
+      if (g.note) note = g.note;
+      return { id: g.id, name: g.name, attending: g.attending ?? null };
+    });
 
-  if (error) {
-    console.error("family lookup failed:", error.message);
+    return { members, note };
+  } catch (err) {
+    console.error("family lookup failed:", err);
     return null;
   }
-
-  let note = "";
-  const members = (data ?? []).map((g: any) => {
-    const rsvp = Array.isArray(g.rsvps) ? g.rsvps[0] : g.rsvps;
-    if (rsvp?.note) note = rsvp.note;
-    return { id: g.id, name: g.name, attending: rsvp ? rsvp.attending : null };
-  });
-
-  return { members, note };
 }
 
 /* ── rsvp ─────────────────────────────────────────────────────────────────── */
@@ -92,12 +90,23 @@ export async function submitRsvp(input: {
   }
 
   const note = input.note.trim().slice(0, 600) || null;
-  const rows = input.responses.map((r) => ({ guest_id: r.guestId, attending: r.attending, note }));
+  const ids = input.responses.map((r) => r.guestId);
+  const attending = input.responses.map((r) => r.attending);
 
-  const { error } = await db().from("rsvps").upsert(rows, { onConflict: "guest_id" });
-
-  if (error) {
-    console.error("rsvp write failed:", error.message);
+  try {
+    /* unnest turns the two parallel arrays into rows, so the whole family is
+       written in one round trip instead of one query per person */
+    await sql()`
+      insert into rsvps (guest_id, attending, note)
+      select id, att, ${note}
+      from unnest(${ids}::uuid[], ${attending}::boolean[]) as t(id, att)
+      on conflict (guest_id) do update
+        set attending = excluded.attending,
+            note = excluded.note,
+            updated_at = now()
+    `;
+  } catch (err) {
+    console.error("rsvp write failed:", err);
     return { ok: false, error: "Something went wrong saving your reply. Please try once more." };
   }
 
@@ -110,18 +119,19 @@ export async function submitRsvp(input: {
 export async function listWishes(): Promise<Wish[]> {
   if (!dbConfigured()) return [];
 
-  const { data, error } = await db()
-    .from("wishes")
-    .select("id, name, message, created_at")
-    .eq("approved", true)
-    .order("created_at", { ascending: false })
-    .limit(50);
-
-  if (error) {
-    console.error("wish list failed:", error.message);
+  try {
+    const rows = (await sql()`
+      select id, name, message, created_at
+      from wishes
+      where approved
+      order by created_at desc
+      limit 50
+    `) as any[];
+    return rows as Wish[];
+  } catch (err) {
+    console.error("wish list failed:", err);
     return [];
   }
-  return data ?? [];
 }
 
 export async function sendWish(input: { name: string; message: string }) {
@@ -135,9 +145,10 @@ export async function sendWish(input: { name: string; message: string }) {
     return { ok: false as const, error: "Wishes aren't connected yet. Please try again later." };
   }
 
-  const { error } = await db().from("wishes").insert({ name, message });
-  if (error) {
-    console.error("wish write failed:", error.message);
+  try {
+    await sql()`insert into wishes (name, message) values (${name}, ${message})`;
+  } catch (err) {
+    console.error("wish write failed:", err);
     return { ok: false as const, error: "Something went wrong sending your wish. Please try once more." };
   }
 

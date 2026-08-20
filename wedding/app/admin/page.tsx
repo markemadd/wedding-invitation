@@ -1,4 +1,4 @@
-import { db, dbConfigured } from "@/lib/supabase";
+import { dbConfigured, sql } from "@/lib/db";
 
 /** Live headcount — never cached. */
 export const dynamic = "force-dynamic";
@@ -7,14 +7,16 @@ type Row = {
   id: string;
   name: string;
   family_id: string;
-  rsvp: { attending: boolean; note: string | null; updated_at: string } | null;
+  attending: boolean | null;
+  note: string | null;
+  updated_at: string | null;
 };
 
 type Status = "all" | "yes" | "no" | "pending";
 
 function statusOf(r: Row): Exclude<Status, "all"> {
-  if (!r.rsvp) return "pending";
-  return r.rsvp.attending ? "yes" : "no";
+  if (r.attending === null) return "pending";
+  return r.attending ? "yes" : "no";
 }
 
 /** A minimal, dependency-free donut — three status slices, always labelled
@@ -110,29 +112,27 @@ export default async function Admin({
     return (
       <main className="admin">
         <h1>Admin</h1>
-        <p className="lede">Supabase isn&rsquo;t configured yet — see wedding/README.md.</p>
+        <p className="lede">The database isn&rsquo;t connected yet — see wedding/README.md.</p>
       </main>
     );
   }
 
-  const { data, error } = await db()
-    .from("guests")
-    .select("id, name, family_id, rsvps(attending, note, updated_at)")
-    .order("name");
-
-  if (error) {
+  let rows: Row[];
+  try {
+    rows = (await sql()`
+      select g.id, g.name, g.family_id, r.attending, r.note, r.updated_at
+      from guests g
+      left join rsvps r on r.guest_id = g.id
+      order by g.name
+    `) as Row[];
+  } catch (err) {
     return (
       <main className="admin">
         <h1>Admin</h1>
-        <p className="lede">Could not read the guest list: {error.message}</p>
+        <p className="lede">Could not read the guest list: {String(err)}</p>
       </main>
     );
   }
-
-  const rows = (data ?? []).map((r: any) => ({
-    ...r,
-    rsvp: Array.isArray(r.rsvps) ? r.rsvps[0] ?? null : r.rsvps,
-  })) as Row[];
 
   const familyNames = new Map<string, string[]>();
   for (const r of rows) {
@@ -218,14 +218,14 @@ export default async function Admin({
                   <td>{r.name}</td>
                   <td className="wrap">{others.join(", ")}</td>
                   <td>
-                    {!r.rsvp && <span className="pill pill--none">Waiting</span>}
-                    {r.rsvp?.attending && <span className="pill pill--yes">Coming</span>}
-                    {r.rsvp && !r.rsvp.attending && <span className="pill pill--no">Not coming</span>}
+                    {r.attending === null && <span className="pill pill--none">Waiting</span>}
+                    {r.attending === true && <span className="pill pill--yes">Coming</span>}
+                    {r.attending === false && <span className="pill pill--no">Not coming</span>}
                   </td>
-                  <td className="wrap">{r.rsvp?.note ?? ""}</td>
+                  <td className="wrap">{r.note ?? ""}</td>
                   <td>
-                    {r.rsvp
-                      ? new Date(r.rsvp.updated_at).toLocaleDateString("en-GB", {
+                    {r.updated_at
+                      ? new Date(r.updated_at).toLocaleDateString("en-GB", {
                           day: "numeric",
                           month: "short",
                         })

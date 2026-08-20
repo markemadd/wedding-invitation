@@ -1,6 +1,6 @@
 -- ============================================================================
 --  Joseph & Maria — guest list + RSVP schema
---  Run this once in the Supabase SQL editor (Dashboard → SQL → New query).
+--  Run once against the Neon database (npm run migrate).
 -- ============================================================================
 
 create extension if not exists pg_trgm;
@@ -61,11 +61,6 @@ create table if not exists public.wishes (
 
 create index if not exists wishes_recent_idx on public.wishes (created_at desc);
 
--- ── row level security ──────────────────────────────────────────────────────
--- The site talks to Supabase only from the server, using the service role key,
--- so no policy grants the anon key anything. Lock all three tables down.
-alter table public.guests enable row level security;
-alter table public.rsvps  enable row level security;
-alter table public.wishes enable row level security;
-
--- (No policies = no anon access. The service role bypasses RLS by design.)
+-- No row-level security needed: the database is reachable only through
+-- DATABASE_URL, which lives on the server and is never shipped to the browser.
+-- Every read and write goes through a server action in app/actions.ts.

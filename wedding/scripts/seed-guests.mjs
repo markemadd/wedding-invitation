@@ -22,14 +22,13 @@ import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
-import { createClient } from "@supabase/supabase-js";
+import { neon } from "@neondatabase/serverless";
 
-const url = process.env.SUPABASE_URL;
-const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const url = process.env.DATABASE_URL;
 const file = process.argv[2];
 
-if (!url || !key) {
-  console.error("Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY first.");
+if (!url) {
+  console.error("Set DATABASE_URL first (vercel env pull .env.local).");
   process.exit(1);
 }
 if (!file) {
@@ -119,30 +118,29 @@ console.log(`${guests.length} guests across ${groups.size} families in the file.
 
 /* ── upsert ──────────────────────────────────────────────────────────────── */
 
-const supabase = createClient(url, key, { auth: { persistSession: false } });
+const sql = neon(url);
 
-const { data: existing, error: readError } = await supabase.from("guests").select("id, name");
-if (readError) {
-  console.error("Could not read the existing list:", readError.message);
-  process.exit(1);
+const existing = await sql`select id, lower(name) as key from guests`;
+const byName = new Map(existing.map((g) => [g.key, g.id]));
+
+const toInsert = guests.filter((g) => !byName.has(g.name.toLowerCase()));
+const toUpdate = guests.filter((g) => byName.has(g.name.toLowerCase()));
+
+if (toInsert.length) {
+  await sql`
+    insert into guests (name, family_id)
+    select * from unnest(${toInsert.map((g) => g.name)}::text[], ${toInsert.map((g) => g.family_id)}::uuid[])
+  `;
 }
 
-const byName = new Map((existing ?? []).map((g) => [g.name.toLowerCase(), g.id]));
-
-let inserted = 0;
-let updated = 0;
-
-for (const g of guests) {
-  const id = byName.get(g.name.toLowerCase());
-  const { error } = id
-    ? await supabase.from("guests").update({ name: g.name, family_id: g.family_id }).eq("id", id)
-    : await supabase.from("guests").insert(g);
-
-  if (error) {
-    console.error(`  ✗ ${g.name}: ${error.message}`);
-    continue;
-  }
-  id ? updated++ : inserted++;
+if (toUpdate.length) {
+  await sql`
+    update guests g
+    set family_id = t.family_id
+    from unnest(${toUpdate.map((g) => byName.get(g.name.toLowerCase()))}::uuid[],
+                ${toUpdate.map((g) => g.family_id)}::uuid[]) as t(id, family_id)
+    where g.id = t.id
+  `;
 }
 
-console.log(`${inserted} added, ${updated} updated, ${guests.length} guests in the file.`);
+console.log(`${toInsert.length} added, ${toUpdate.length} updated, ${guests.length} guests in the file.`);

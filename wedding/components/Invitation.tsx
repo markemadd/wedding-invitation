@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { wedding } from "@/lib/config";
-import type { Wish } from "@/lib/supabase";
+import type { Wish } from "@/lib/db";
 import CalendarCard from "./CalendarCard";
 import Countdown from "./Countdown";
 import Cover from "./Cover";
