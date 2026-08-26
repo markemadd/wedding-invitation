@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { couple } from "@/lib/config";
 import landingBg from "@/public/landing-bg.png";
 import landingEnvelope from "@/public/landing-envelope.png";
+import landingMonogram from "@/public/landing-monogram.png";
 import landingSeal from "@/public/landing-seal.png";
 import landingSprig from "@/public/landing-sprig.png";
 
@@ -46,10 +47,13 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
 
         <button type="button" className="cover__envelope" onClick={open} aria-label="Open the invitation">
           <Image src={landingEnvelope} alt="" priority sizes="(max-width: 30rem) 82vw, 24rem" />
-          <span className="cover__monogram">
-            {couple.first[0]}
-            {couple.second[0]}
-          </span>
+          <Image
+            className="cover__monogram"
+            src={landingMonogram}
+            alt={`${couple.first} and ${couple.second}`}
+            priority
+            sizes="6rem"
+          />
           <Image className="cover__seal" src={landingSeal} alt="" sizes="4.5rem" />
           <Image className="cover__sprig" src={landingSprig} alt="" sizes="7rem" />
         </button>
@@ -134,15 +138,14 @@ export default function Cover({ onOpen }: { onOpen: () => void }) {
           display: block;
         }
 
-        .cover__monogram {
-          position: absolute;
-          top: 26%;
+        :global(.cover__monogram) {
+          position: absolute !important;
+          top: 25%;
           left: 50%;
           transform: translate(-50%, -50%);
-          font-family: var(--font-script), "Pinyon Script", cursive;
-          font-size: 1.75rem;
-          letter-spacing: 0.04em;
-          color: rgba(255, 255, 255, 0.92);
+          width: 4.4rem !important;
+          height: auto !important;
+          filter: drop-shadow(0 2px 4px rgba(20, 30, 16, 0.45));
         }
 
         /* next/image renders a plain <img> for a custom component, which
