@@ -25,23 +25,25 @@ export const wedding = {
    * in the reading face, because four lines of script on a phone is a wall.
    */
   welcome: {
-    salutation: "Dear family and friends!",
+    salutation: "To our dearest family and friends,",
     body: [
-      "We are so happy to invite you to share this meaningful day with us.",
-      "Your presence will make our wedding even more special.",
+      "Our favorite chapter is about to begin, and we feel incredibly lucky to share its very first page with you.",
+      "Having you there to celebrate our love would mean more to us than words can say.",
     ],
     valediction: "With love,",
     signature: "Joseph & Maria",
   },
 
-  /** Ceremony — 2:00 PM Cairo time (UTC+3 in September). */
-  date: "2026-09-26T14:00:00+03:00",
+  /** Ceremony — 2:30 PM Cairo time (UTC+3 in September). */
+  date: "2026-09-26T14:30:00+03:00",
   dateLabel: { weekday: "Saturday", day: "26", month: "September", year: "2026" },
 
   ceremony: {
     name: "Saint Mary & Ava Bishoy Church",
     address: "Fifth Settlement, New Cairo, Egypt",
-    time: "14:00",
+    time: "14:30",
+    /** Shown in the Ceremony Details block. */
+    timeLabel: "2:30 PM",
     mapUrl: "https://maps.app.goo.gl/6YktmPeXctiEo5c8A",
     /** Optional "q=" value for the embedded map, e.g. "30.0131,31.4372". */
     mapQuery: "Saint Mary and Ava Bishoy Church, Fifth Settlement, New Cairo",
@@ -50,24 +52,12 @@ export const wedding = {
   reception: {
     name: "The Beach JW Marriott",
     address: "Ring Road, Mirage City, Cairo, Egypt",
-    /** Set once you know it — shown in the Reception Info block. */
     time: "18:00",
+    /** Shown in the Reception block. */
+    timeLabel: "6:00 PM",
     mapUrl: "https://maps.app.goo.gl/5phgeT8bHqDD7A849",
     mapQuery: "The Beach JW Marriott Cairo",
   },
-
-  /** The running order shown on the timeline. Add or remove freely. */
-  schedule: [
-    { time: "14:00", label: "Ceremony" },
-    { time: "17:30", label: "Welcome" },
-    { time: "18:00", label: "Reception" },
-    { time: "19:00", label: "Dinner" },
-    { time: "20:00", label: "Cake & Toasts" },
-    { time: "23:00", label: "Farewell" },
-  ],
-
-  /** Gift registry / redirection link. Empty = the button reads "coming soon". */
-  giftUrl: "",
 
   /** Replies close on this date. */
   rsvpBy: "1 September 2026",

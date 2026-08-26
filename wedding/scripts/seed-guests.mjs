@@ -143,4 +143,40 @@ if (toUpdate.length) {
   `;
 }
 
-console.log(`${toInsert.length} added, ${toUpdate.length} updated, ${guests.length} guests in the file.`);
+/* ── prune ────────────────────────────────────────────────────────────────
+   A guest renamed in the spreadsheet ("Hakim" → "Hakim Magdy") reads here as
+   one insert plus one row nobody points at any more, so stale rows have to
+   go or they linger in the search forever. Anyone who has already replied is
+   reported instead of deleted — losing a real RSVP to a spelling change is
+   never the right trade.                                                    */
+
+const inFile = new Set(guests.map((g) => g.name.toLowerCase()));
+const stale = existing.filter((g) => !inFile.has(g.key));
+
+let deleted = 0;
+if (stale.length) {
+  const staleIds = stale.map((g) => g.id);
+  const answered = await sql`
+    select g.id, g.name from guests g
+    join rsvps r on r.guest_id = g.id
+    where g.id = any(${staleIds}::uuid[])
+  `;
+  const keep = new Set(answered.map((g) => g.id));
+  const removable = staleIds.filter((id) => !keep.has(id));
+
+  if (removable.length) {
+    await sql`delete from guests where id = any(${removable}::uuid[])`;
+    deleted = removable.length;
+  }
+  if (answered.length) {
+    console.warn(
+      `\n  ! ${answered.length} guest(s) are no longer in the file but have already replied — ` +
+        `left in place:\n    ${answered.map((g) => g.name).join(", ")}\n`
+    );
+  }
+}
+
+console.log(
+  `${toInsert.length} added, ${toUpdate.length} updated, ${deleted} removed, ` +
+    `${guests.length} guests in the file.`
+);

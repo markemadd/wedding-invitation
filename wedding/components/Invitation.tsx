@@ -14,9 +14,7 @@ import {
   CeremonyInfo,
   ChurchDetails,
   Closing,
-  Gifts,
   Hero,
-  Schedule,
   Verse,
   VenueDetails,
 } from "./Sections";
@@ -24,9 +22,8 @@ import {
 /**
  * Section order: welcome + envelope (in Hero) → the story → the verse →
  * ceremony info (names) → church details → venue details → the calendar →
- * countdown → the day's schedule (the one place any time appears) → RSVP →
- * gifts → wishes → closing. Church comes before venue because that is the
- * order of the day.
+ * countdown → RSVP → wishes → closing. Church comes before venue because
+ * that is the order of the day, and each carries its own time.
  */
 export default function Invitation({ wishes }: { wishes: Wish[] }) {
   const [opened, setOpened] = useState(false);
@@ -44,9 +41,7 @@ export default function Invitation({ wishes }: { wishes: Wish[] }) {
         <VenueDetails />
         <CalendarCard />
         <Countdown />
-        <Schedule />
         <Rsvp />
-        <Gifts />
         <Wishes initial={wishes} />
         <Closing />
       </main>

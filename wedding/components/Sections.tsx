@@ -102,8 +102,7 @@ export function CeremonyInfo() {
   );
 }
 
-/* ── venue details (reception) ───────────────────────────────────────────
-   Where only — the time lives once, in the day's Schedule below. */
+/* ── venue details (reception) ─────────────────────────────────────────── */
 
 export function VenueDetails() {
   const { reception } = wedding;
@@ -111,7 +110,7 @@ export function VenueDetails() {
     <Reveal className="section">
       <Divider width={200} />
       <p className="eyebrow">Reception to Follow</p>
-      <p className="lede">We invite you to celebrate with us at</p>
+      <p className="lede">Join us to celebrate at {reception.timeLabel}</p>
 
       <div className="card venue-card">
         <span className="venue-card__corner"><Corner corner="tr" /></span>
@@ -129,42 +128,14 @@ export function VenueDetails() {
   );
 }
 
-/* ── schedule ─────────────────────────────────────────────────────────── */
-
-export function Schedule() {
-  return (
-    <Reveal className="section">
-      <p className="eyebrow eyebrow-rule">Wedding Day Schedule</p>
-
-      <div className="card timeline-card">
-        <span className="timeline-card__corner"><Corner corner="tr" /></span>
-        <p className="timeline-card__title">Our Timeline</p>
-
-        <div className="timeline">
-          <ol>
-            {wedding.schedule.map((row) => (
-              <li key={row.time + row.label}>
-                <span className="timeline__time">{row.time}</span>
-                <span className="timeline__dot" aria-hidden="true" />
-                <span className="timeline__label">{row.label}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </div>
-    </Reveal>
-  );
-}
-
 /* ── church details ───────────────────────────────────────────────────── */
-/* Where only — the time lives once, in the day's Schedule below. */
 
 export function ChurchDetails() {
   const { ceremony } = wedding;
   return (
     <Reveal className="section">
       <p className="eyebrow eyebrow-rule">Ceremony Details</p>
-      <p className="lede">Join us for the ceremony at 2 PM</p>
+      <p className="lede">Join us for the ceremony at {ceremony.timeLabel}</p>
 
       <div className="card venue-card">
         <span className="venue-card__corner"><Corner corner="tr" /></span>
@@ -182,27 +153,6 @@ export function ChurchDetails() {
   );
 }
 
-/* ── gifts ────────────────────────────────────────────────────────────── */
-
-export function Gifts() {
-  return (
-    <Reveal className="section">
-      <Divider width={200} />
-      <p className="eyebrow">Gifts</p>
-      <p className="lede">
-        Your presence is the gift — nothing else is expected. If you&rsquo;d like to
-        mark the day with something, we&rsquo;ve put a short list together.
-      </p>
-      {wedding.giftUrl ? (
-        <a className="btn" href={wedding.giftUrl} target="_blank" rel="noopener noreferrer">
-          See the gift list
-        </a>
-      ) : (
-        <span className="btn" aria-disabled="true">List coming soon</span>
-      )}
-    </Reveal>
-  );
-}
 
 /* ── closing ──────────────────────────────────────────────────────────── */
 

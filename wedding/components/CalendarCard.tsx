@@ -35,7 +35,7 @@ function icsFile() {
     `SUMMARY:${esc(`The wedding of ${couple.pair}`)}`,
     `LOCATION:${esc(`${wedding.ceremony.name}, ${wedding.ceremony.address}`)}`,
     `DESCRIPTION:${esc(
-      `Ceremony at ${wedding.ceremony.time}. Reception to follow at ${wedding.reception.name}.`
+      `Ceremony at ${wedding.ceremony.timeLabel}. Reception to follow at ${wedding.reception.timeLabel}, ${wedding.reception.name}.`
     )}`,
     "END:VEVENT",
     "END:VCALENDAR",
