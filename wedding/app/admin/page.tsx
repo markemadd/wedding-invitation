@@ -1,3 +1,5 @@
+import { listAllWishes } from "@/app/actions";
+import WishesAdmin from "@/components/WishesAdmin";
 import { dbConfigured, sql } from "@/lib/db";
 
 /** Live headcount — never cached. */
@@ -118,6 +120,7 @@ export default async function Admin({
   }
 
   let rows: Row[];
+  let wishes: Awaited<ReturnType<typeof listAllWishes>> = [];
   try {
     rows = (await sql()`
       select g.id, g.name, g.family_id, r.attending, r.note, r.updated_at
@@ -125,6 +128,7 @@ export default async function Admin({
       left join rsvps r on r.guest_id = g.id
       order by g.name
     `) as Row[];
+    wishes = await listAllWishes(searchParams.key);
   } catch (err) {
     return (
       <main className="admin">
@@ -238,6 +242,8 @@ export default async function Admin({
         </table>
         {filtered.length === 0 && <p className="lede">No guests match that filter.</p>}
       </div>
+
+      <WishesAdmin adminKey={key} initial={wishes} />
     </main>
   );
 }

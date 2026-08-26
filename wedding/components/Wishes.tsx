@@ -31,6 +31,8 @@ export default function Wishes({ initial }: { initial: Wish[] }) {
       setSent(true);
       setName("");
       setMessage("");
+      /* the new wish is held for approval, so it deliberately won't be in
+         this list yet — refetch anyway to pick up anything newly released */
       setWishes(await listWishes());
     });
   }
@@ -69,7 +71,11 @@ export default function Wishes({ initial }: { initial: Wish[] }) {
           </div>
 
           {error && <p className="rsvp__error">{error}</p>}
-          {sent && !error && <p className="wishes__sent">Thank you — your wish is below.</p>}
+          {sent && !error && (
+            <p className="wishes__sent">
+              Thank you — Joseph &amp; Maria will see your wish, and it will appear here shortly.
+            </p>
+          )}
 
           <button className="btn" type="submit" disabled={pending}>
             {pending ? "Sending…" : "Send Wish"}

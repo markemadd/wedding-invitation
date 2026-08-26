@@ -146,12 +146,70 @@ export async function sendWish(input: { name: string; message: string }) {
   }
 
   try {
+    /* approved defaults to false — the wall is public, so a wish waits for
+       the couple to release it in /admin before anyone else can read it */
     await sql()`insert into wishes (name, message) values (${name}, ${message})`;
   } catch (err) {
     console.error("wish write failed:", err);
     return { ok: false as const, error: "Something went wrong sending your wish. Please try once more." };
   }
 
+  revalidatePath("/admin");
+  return { ok: true as const };
+}
+
+/* ── moderation ───────────────────────────────────────────────────────────
+   Server actions are ordinary POST endpoints — anyone can call one if they
+   know it exists — so these re-check the admin key themselves rather than
+   trusting that the caller came from the admin page.                       */
+
+function isAdmin(key: string): boolean {
+  const secret = process.env.ADMIN_KEY;
+  return Boolean(secret) && key === secret;
+}
+
+export async function listAllWishes(key: string): Promise<(Wish & { approved: boolean })[]> {
+  if (!isAdmin(key) || !dbConfigured()) return [];
+
+  try {
+    const rows = (await sql()`
+      select id, name, message, approved, created_at
+      from wishes
+      order by approved, created_at desc
+    `) as any[];
+    return rows;
+  } catch (err) {
+    console.error("wish moderation list failed:", err);
+    return [];
+  }
+}
+
+export async function setWishApproved(key: string, id: string, approved: boolean) {
+  if (!isAdmin(key)) return { ok: false as const, error: "Not authorised." };
+
+  try {
+    await sql()`update wishes set approved = ${approved} where id = ${id}`;
+  } catch (err) {
+    console.error("wish approve failed:", err);
+    return { ok: false as const, error: "Could not update that wish." };
+  }
+
   revalidatePath("/");
+  revalidatePath("/admin");
+  return { ok: true as const };
+}
+
+export async function deleteWish(key: string, id: string) {
+  if (!isAdmin(key)) return { ok: false as const, error: "Not authorised." };
+
+  try {
+    await sql()`delete from wishes where id = ${id}`;
+  } catch (err) {
+    console.error("wish delete failed:", err);
+    return { ok: false as const, error: "Could not delete that wish." };
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin");
   return { ok: true as const };
 }

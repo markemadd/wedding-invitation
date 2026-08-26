@@ -55,7 +55,9 @@ create table if not exists public.wishes (
   id          uuid primary key default gen_random_uuid(),
   name        text not null check (char_length(name) between 1 and 80),
   message     text not null check (char_length(message) between 1 and 600),
-  approved    boolean not null default true,  -- flip to false to pre-moderate
+  -- Held back until the couple approves it in /admin: the wall is public and
+  -- open to anyone with the link, so nothing appears unreviewed.
+  approved    boolean not null default false,
   created_at  timestamptz not null default now()
 );
 
