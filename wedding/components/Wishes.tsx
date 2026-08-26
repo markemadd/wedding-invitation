@@ -73,7 +73,7 @@ export default function Wishes({ initial }: { initial: Wish[] }) {
           {error && <p className="rsvp__error">{error}</p>}
           {sent && !error && (
             <p className="wishes__sent">
-              Thank you — Joseph &amp; Maria will see your wish, and it will appear here shortly.
+              Thank you — Joseph &amp; Maria will see your wish.
             </p>
           )}
 
