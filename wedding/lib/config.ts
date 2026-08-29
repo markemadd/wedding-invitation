@@ -60,7 +60,7 @@ export const wedding = {
   },
 
   /** Replies close on this date. */
-  rsvpBy: "1 September 2026",
+  rsvpBy: "6 September 2026",
 
   /** Optional background music file placed in /public (e.g. "/music.mp3"). */
   music: "/music.mp3",
