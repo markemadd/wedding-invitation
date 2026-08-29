@@ -20,6 +20,33 @@ export default function MusicToggle({ src, armed }: { src: string; armed: boolea
       .catch(() => setPlaying(false)); // autoplay refused — the button still works
   }, [armed, src]);
 
+  /* Stop the moment the page goes away.
+     Closing a tab (or backgrounding Safari on iOS) does not reliably fire
+     "unload", and a page kept in the back/forward cache goes on playing —
+     so pause on pagehide AND on the visibility change that precedes it. */
+  useEffect(() => {
+    if (!src) return;
+
+    const stop = () => {
+      const el = audio.current;
+      if (el && !el.paused) {
+        el.pause();
+        setPlaying(false);
+      }
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === "hidden") stop();
+    };
+
+    window.addEventListener("pagehide", stop);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pagehide", stop);
+      document.removeEventListener("visibilitychange", onVisibility);
+      stop(); // unmounting the player must silence it too
+    };
+  }, [src]);
+
   if (!src) return null;
 
   function toggle() {

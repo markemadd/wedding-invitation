@@ -8,9 +8,16 @@ import p2 from "@/public/story/02.webp";
 import p3 from "@/public/story/03.webp";
 import p4 from "@/public/story/04.webp";
 import p5 from "@/public/story/05.webp";
+import p6 from "@/public/story/06.webp";
+import p7 from "@/public/story/07.webp";
+import p8 from "@/public/story/08.webp";
+import p9 from "@/public/story/09.webp";
+import p10 from "@/public/story/10.webp";
+import p11 from "@/public/story/11.webp";
+import p12 from "@/public/story/12.webp";
 import Reveal from "./Reveal";
 
-const PHOTOS: StaticImageData[] = [p1, p2, p3, p4, p5];
+const PHOTOS: StaticImageData[] = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12];
 
 /**
  * The engagement photographs.

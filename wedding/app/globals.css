@@ -1091,9 +1091,8 @@ textarea { resize: vertical; min-height: 6rem; line-height: 1.6; }
   display: block;
 }
 
-/* the two landscape frames sit better a little high in the crop */
-.carousel__slide:nth-child(3) img,
-.carousel__slide:nth-child(5) img { object-position: 50% 42%; }
+/* the one landscape frame sits better a little high in the crop */
+.carousel__slide:nth-child(3) img { object-position: 50% 42%; }
 
 .carousel__arrow {
   position: absolute;
