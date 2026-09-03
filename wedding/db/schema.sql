@@ -15,8 +15,16 @@ create table if not exists public.guests (
   id          uuid primary key default gen_random_uuid(),
   name        text not null,
   family_id   uuid not null default gen_random_uuid(),
+  source      text not null default 'manual',
   created_at  timestamptz not null default now()
 );
+
+-- Which workflow owns this row. The seed script rewrites the spreadsheet's
+-- people wholesale, deleting anyone the file no longer lists — so a guest
+-- added by hand in /admin has to be marked 'manual' or the next import would
+-- quietly take them out again. Existing rows all came from the file.
+alter table public.guests add column if not exists source text not null default 'excel';
+alter table public.guests alter column source set default 'manual';
 
 -- Fuzzy substring search over the name, so "Mark" finds every Mark.
 create index if not exists guests_name_trgm_idx

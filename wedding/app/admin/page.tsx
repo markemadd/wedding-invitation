@@ -1,4 +1,6 @@
 import { listAllWishes } from "@/app/actions";
+import GuestsAdmin from "@/components/GuestsAdmin";
+import RemoveGuest from "@/components/RemoveGuest";
 import WishesAdmin from "@/components/WishesAdmin";
 import { dbConfigured, sql } from "@/lib/db";
 
@@ -212,6 +214,7 @@ export default async function Admin({
               <th>Reply</th>
               <th>Note</th>
               <th>Replied</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -235,6 +238,14 @@ export default async function Admin({
                         })
                       : "—"}
                   </td>
+                  <td>
+                    <RemoveGuest
+                      adminKey={key}
+                      id={r.id}
+                      name={r.name}
+                      hasReplied={r.attending !== null}
+                    />
+                  </td>
                 </tr>
               );
             })}
@@ -242,6 +253,8 @@ export default async function Admin({
         </table>
         {filtered.length === 0 && <p className="lede">No guests match that filter.</p>}
       </div>
+
+      <GuestsAdmin adminKey={key} guests={rows.map((r) => ({ id: r.id, name: r.name }))} />
 
       <WishesAdmin adminKey={key} initial={wishes} />
     </main>

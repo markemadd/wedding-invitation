@@ -108,28 +108,41 @@ for (const key of parent.keys()) {
   groups.get(root).push(display.get(key));
 }
 
-const guests = [];
-for (const members of groups.values()) {
-  const family_id = randomUUID();
-  for (const name of members) guests.push({ name, family_id });
-}
-
-console.log(`${guests.length} guests across ${groups.size} families in the file.`);
+console.log(`${[...groups.values()].flat().length} guests across ${groups.size} families in the file.`);
 
 /* ── upsert ──────────────────────────────────────────────────────────────── */
 
 const sql = neon(url);
 
-const existing = await sql`select id, lower(name) as key from guests`;
+const existing = await sql`select id, lower(name) as key, family_id, source from guests`;
 const byName = new Map(existing.map((g) => [g.key, g.id]));
+const familyByName = new Map(existing.map((g) => [g.key, g.family_id]));
+
+/* Reuse the family_id a group already has rather than minting a fresh one
+   every run. Stable ids matter because a guest added by hand in /admin joins
+   a family by copying its id — churn it here and the next import silently
+   orphans them. Where a group's members arrive carrying different ids (two
+   families merged in the spreadsheet) the most common one wins. */
+const guests = [];
+for (const members of groups.values()) {
+  const seen = new Map();
+  for (const name of members) {
+    const id = familyByName.get(name.toLowerCase());
+    if (id) seen.set(id, (seen.get(id) ?? 0) + 1);
+  }
+  const family_id = seen.size
+    ? [...seen.entries()].sort((a, b) => b[1] - a[1])[0][0]
+    : randomUUID();
+  for (const name of members) guests.push({ name, family_id });
+}
 
 const toInsert = guests.filter((g) => !byName.has(g.name.toLowerCase()));
 const toUpdate = guests.filter((g) => byName.has(g.name.toLowerCase()));
 
 if (toInsert.length) {
   await sql`
-    insert into guests (name, family_id)
-    select * from unnest(${toInsert.map((g) => g.name)}::text[], ${toInsert.map((g) => g.family_id)}::uuid[])
+    insert into guests (name, family_id, source)
+    select *, 'excel' from unnest(${toInsert.map((g) => g.name)}::text[], ${toInsert.map((g) => g.family_id)}::uuid[])
   `;
 }
 
@@ -146,12 +159,13 @@ if (toUpdate.length) {
 /* ── prune ────────────────────────────────────────────────────────────────
    A guest renamed in the spreadsheet ("Hakim" → "Hakim Magdy") reads here as
    one insert plus one row nobody points at any more, so stale rows have to
-   go or they linger in the search forever. Anyone who has already replied is
-   reported instead of deleted — losing a real RSVP to a spelling change is
-   never the right trade.                                                    */
+   go or they linger in the search forever. Two things are never pruned:
+   guests added by hand in /admin, who were never in the file to begin with,
+   and anyone who has already replied — losing a real RSVP to a spelling
+   change is never the right trade.                                          */
 
 const inFile = new Set(guests.map((g) => g.name.toLowerCase()));
-const stale = existing.filter((g) => !inFile.has(g.key));
+const stale = existing.filter((g) => g.source === "excel" && !inFile.has(g.key));
 
 let deleted = 0;
 if (stale.length) {

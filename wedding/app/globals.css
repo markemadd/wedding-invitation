@@ -833,6 +833,55 @@ textarea { resize: vertical; min-height: 6rem; line-height: 1.6; }
   background: var(--card);
 }
 
+/* ── guest list editing ─────────────────────────────────────────────────── */
+
+.admin__add { margin-top: 3rem; }
+.admin__add h2 { margin-bottom: 1.25rem; }
+.admin__add-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--hair-soft);
+  border-radius: 16px;
+  background: var(--card);
+}
+.admin__add-form .field { flex: 1; min-width: 14rem; }
+.admin__add-form .btn { flex: none; min-height: 2.9rem; }
+.admin__add-done { margin-top: 0.9rem; color: var(--ink-soft); }
+.admin__add-done strong { color: var(--gold-700); }
+
+.admin__remove {
+  border: 1px solid var(--hair-soft);
+  border-radius: 999px;
+  background: var(--card);
+  padding: 0.25rem 0.75rem;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.admin__remove:hover { color: #9A3B2F; border-color: #9A3B2F; }
+.admin__remove.is-armed {
+  background: #9A3B2F;
+  border-color: #9A3B2F;
+  color: #fff;
+}
+.admin__remove-cancel {
+  margin-left: 0.4rem;
+  border: 0;
+  background: none;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.admin__remove-error { display: block; margin-top: 0.3rem; font-size: 0.78rem; color: #9A3B2F; }
+.admin__removed { font-size: 0.8rem; color: var(--ink-faint); font-style: italic; }
+
 /* ── wishes moderation ──────────────────────────────────────────────────── */
 
 .admin__wishes { margin-top: 3rem; }

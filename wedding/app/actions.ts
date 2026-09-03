@@ -213,3 +213,77 @@ export async function deleteWish(key: string, id: string) {
   revalidatePath("/admin");
   return { ok: true as const };
 }
+
+/* ── guest list editing ───────────────────────────────────────────────────
+   The spreadsheet stays the bulk workflow; this is for one-off corrections.
+   Rows written here are marked source='manual' so a later re-import of the
+   spreadsheet leaves them alone instead of pruning them as missing.        */
+
+export type AddGuestResult =
+  | { ok: true; name: string; family: string[] }
+  | { ok: false; error: string };
+
+export async function addGuest(input: {
+  key: string;
+  name: string;
+  /** Optional: an existing guest whose family the new person joins. */
+  linkToGuestId?: string;
+}): Promise<AddGuestResult> {
+  if (!isAdmin(input.key)) return { ok: false, error: "Not authorised." };
+
+  const name = input.name.trim().replace(/\s+/g, " ").slice(0, 120);
+  if (!name) return { ok: false, error: "Please enter a name." };
+
+  try {
+    const clash = (await sql()`select 1 from guests where lower(name) = ${name.toLowerCase()}`) as any[];
+    if (clash.length) {
+      return {
+        ok: false,
+        error: `"${name}" is already on the list. Guests search by name, so add something that tells them apart — a surname, for instance.`,
+      };
+    }
+
+    /* Joining someone means sharing their family_id; on its own the row's
+       own default gives it a family of one. */
+    let familyId: string | null = null;
+    if (input.linkToGuestId) {
+      const rows = (await sql()`select family_id from guests where id = ${input.linkToGuestId}`) as any[];
+      if (!rows.length) return { ok: false, error: "Could not find the guest to link to." };
+      familyId = rows[0].family_id;
+    }
+
+    const inserted = (
+      familyId
+        ? await sql()`insert into guests (name, family_id, source) values (${name}, ${familyId}, 'manual') returning family_id`
+        : await sql()`insert into guests (name, source) values (${name}, 'manual') returning family_id`
+    ) as any[];
+
+    const family = (await sql()`
+      select name from guests where family_id = ${inserted[0].family_id} order by name
+    `) as any[];
+
+    revalidatePath("/admin");
+    return { ok: true, name, family: family.map((f) => f.name) };
+  } catch (err) {
+    console.error("add guest failed:", err);
+    return { ok: false, error: "Could not add that guest. Please try again." };
+  }
+}
+
+export async function removeGuest(key: string, id: string) {
+  if (!isAdmin(key)) return { ok: false as const, error: "Not authorised." };
+
+  try {
+    /* Deleting cascades to their RSVP, so say so rather than discarding a
+       real reply on a single click. */
+    const replied = (await sql()`select 1 from rsvps where guest_id = ${id}`) as any[];
+    const rows = (await sql()`delete from guests where id = ${id} returning name`) as any[];
+    if (!rows.length) return { ok: false as const, error: "That guest is no longer on the list." };
+
+    revalidatePath("/admin");
+    return { ok: true as const, name: rows[0].name, hadReplied: replied.length > 0 };
+  } catch (err) {
+    console.error("remove guest failed:", err);
+    return { ok: false as const, error: "Could not remove that guest. Please try again." };
+  }
+}
